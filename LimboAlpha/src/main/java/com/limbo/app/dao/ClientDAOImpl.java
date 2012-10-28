@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.limbo.app.domain.Client;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class ClientDAOImpl implements ClientDAO {
@@ -20,9 +22,8 @@ public class ClientDAOImpl implements ClientDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Client> listClient() {
-
-		return sessionFactory.getCurrentSession().createQuery("from clients")
-				.list();
+		Session session = sessionFactory.getCurrentSession();
+		return session.createQuery("from Client").list();
 	}
 
 	public void removeClient(Integer id) {

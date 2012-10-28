@@ -19,12 +19,10 @@ public class ClientServiceImpl implements ClientService {
     public void addClient(Client client) {
     	clientDAO.addClient(client);
     }
- 
     @Transactional
     public List<Client> listClient() { 
         return clientDAO.listClient();
     }
- 
     @Transactional
     public void removeClient (Integer id) {
     	clientDAO.removeClient(id);

@@ -21,14 +21,14 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<!--<context:component-scan base-package="com.limbo.app" />-->
+	<context:component-scan base-package="com.limbo.app" />
 	
 		
-	<!-- Файл с настройками контроллеров 
-	<beans:import resource="controllers.xml"/>-->
+	<!-- Файл с настройками контроллеров -->
+	<beans:import resource="controllers.xml"/>
 	
-	<context:component-scan base-package="com.limbo.app">
+	<!--  <context:component-scan base-package="com.limbo.app">
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-	</context:component-scan>
+	</context:component-scan>-->
 	
 </beans:beans>

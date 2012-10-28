@@ -27,10 +27,10 @@
 			<td><form:input path="name" /></td>
 		</tr>
 		<tr>
-			<td><form:label path="pvn_number">
-				<spring:message code="label.pvn_number" />
+			<td><form:label path="pvnNumber">
+				<spring:message code="label.pvnNumber" />
 			</form:label></td>
-			<td><form:input path="pvn_number" /></td>
+			<td><form:input path="pvnNumber" /></td>
 		</tr>
 		<tr>
 			<td><form:label path="country">
@@ -52,18 +52,18 @@
 </form:form>
 
 <h3><spring:message code="label.clients" /></h3>
-<c:if test="${!empty clienttList}">
+<c:if test="${!empty clientList}">
 	<table class="data">
 		<tr>
 			<th><spring:message code="label.name" /></th>
-			<th><spring:message code="label.pvn_number" /></th>
+			<th><spring:message code="label.pvnNumber" /></th>
 			<th><spring:message code="label.country" /></th>
 			<th>&nbsp;</th>
 		</tr>
 		<c:forEach items="${clientList}" var="client">
 			<tr>
 				<td>${client.name}</td>
-				<td>${client.pvn_number}</td>
+				<td>${client.pvnNumber}</td>
 				<td>${client.country}</td>
 				<td><a href="delete/${client.id}"><spring:message code="label.delete" /></a></td>
 			</tr>
