@@ -16,37 +16,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ClientController {
 
-    @Autowired
-    private ClientService clientService;
+	@Autowired
+	private ClientService clientService;
 
-    @RequestMapping("/index")
-    public String listClients(Map<String, Object> map) {
+	@RequestMapping("/index")
+	public String listClients(Map<String, Object> map) {
 
-        map.put("client", new Client());
-        map.put("clientList", clientService.listClient());
+		map.put("client", new Client());
+		map.put("clientList", clientService.listClient());
 
-        return "contact";
-    }
-    
-    @RequestMapping("/")
-    public String home() {
-        return "redirect:/index";
-    }
+		return "contact";
+	}
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addClient(@ModelAttribute("contact") Client client,
-            BindingResult result) {
+	@RequestMapping("/")
+	public String home() {
+		return "redirect:/index";
+	}
 
-    	clientService.addClient(client);
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public String addClient(@ModelAttribute("contact") Client client,
+			BindingResult result) {
 
-        return "redirect:/index";
-    }
+		clientService.addClient(client);
 
-    @RequestMapping("/delete/{clientId}")
-    public String deleteClient(@PathVariable("clientId") Integer clientId) {
+		return "redirect:/index";
+	}
 
-    	clientService.removeClient(clientId);
+	@RequestMapping("/delete/{clientId}")
+	public String deleteClient(@PathVariable("clientId") Integer clientId) {
 
-        return "redirect:/index";
-    }
+		clientService.removeClient(clientId);
+
+		return "redirect:/index";
+	}
 }

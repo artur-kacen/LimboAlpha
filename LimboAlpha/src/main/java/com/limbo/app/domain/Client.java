@@ -15,10 +15,10 @@ public class Client {
     @GeneratedValue
     private Integer id;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "PVN_NUMBER")
+    @Column(name = "PVN_NUMBER", unique = true, nullable = false, length = 21)
     private String pvnNumber;
 
     @Column(name = "COUNTRY")

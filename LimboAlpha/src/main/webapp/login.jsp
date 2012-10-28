@@ -7,18 +7,28 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf8">
 	<title><spring:message code="label.title" /></title>
+	<style>
+		.errorblock {
+			color: #ff0000;
+			background-color: #ffEEEE;
+			border: 3px solid #ff0000;
+			padding: 8px,;
+			margin: 16px;			
+		}
+	</style>
 </head>
-<body>
+<body onload="document.f.j_username.focus()">
 
 <a href="<c:url value="/index" />">
 	<spring:message code="label.clients" />
 </a><br/>
 
 <c:if test="${not empty param.error}">
-	<font color="red"> <spring:message code="label.loginerror" />
-	: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} </font>
+	<div class="errorblock">
+		<spring:message code="label.loginerror" />: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
+	</div>	
 </c:if>
-<form method="POST" action="<c:url value="/j_spring_security_check" />">
+<form name="f" method="POST" action="<c:url value="/j_spring_security_check" />">
 <table>
 	<tr>
 		<td align="right"><spring:message code="label.login" /></td>
