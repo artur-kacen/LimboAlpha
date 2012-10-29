@@ -10,7 +10,7 @@
 	<title><spring:message code="label.title" /></title>
 </head>
 <body>
-
+<jsp:include page="main.jsp" />
 <a href="<c:url value="/logout" />">
 	<spring:message code="label.logout" />
 </a>
@@ -60,11 +60,11 @@
 			<th><spring:message code="label.country" /></th>
 			<th>&nbsp;</th>
 		</tr>
-		<c:forEach items="${clientList}" var="client">
+		<c:forEach items="${clientList}" var="client" varStatus="status">
 			<tr>
-				<td>${client.name}</td>
-				<td>${client.pvnNumber}</td>
-				<td>${client.country}</td>
+				<td><input name="contacts[${status.index}].firstname" value="${client.name}"/></td>
+				<td><input name="contacts[${status.index}].firstname" value="${client.pvnNumber}"/></td>
+				<td><input name="contacts[${status.index}].firstname" value="${client.country}"/></td>
 				<td><a href="delete/${client.id}"><spring:message code="label.delete" /></a></td>
 			</tr>
 		</c:forEach>

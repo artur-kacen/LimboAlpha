@@ -2,7 +2,7 @@ package com.limbo.app.dao;
 
 import java.util.List;
 
-import com.limbo.app.domain.Client;
+import com.limbo.app.domain.Repair;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,26 +10,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ClientDAOImpl implements ClientDAO {
+public class RepairDAOImpl implements RepairDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public void addClient(Client client) {
-		sessionFactory.getCurrentSession().save(client);
+	public void addRepair(Repair repair) {
+		sessionFactory.getCurrentSession().save(repair);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Client> listClient() {
+	public List<Repair> listRepair() {
 		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("from Client").list();
+		return session.createQuery("from Repair").list();
 	}
 
-	public void removeClient(Integer id) {
+	public void removeRepair(Integer id) {
 		Session session = sessionFactory.getCurrentSession();
-		Client client = (Client) session.load(Client.class, id);
-		if (null != client) {
-			sessionFactory.getCurrentSession().delete(client);
+		Repair repair = (Repair) session.load(Repair.class, id);
+		if (null != repair) {
+			sessionFactory.getCurrentSession().delete(repair);
 		}
 
 	}

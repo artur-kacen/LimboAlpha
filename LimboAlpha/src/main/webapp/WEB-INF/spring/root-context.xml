@@ -29,6 +29,7 @@
 	<context:component-scan base-package="com.limbo.app.dao"/>
 	<context:component-scan base-package="com.limbo.app.service"/>
 	
+	
 	<!--	Файл с настройками ресурсов для работы с данными (Data Access Resources)	-->
 	<import resource="data.xml"/>
 	
