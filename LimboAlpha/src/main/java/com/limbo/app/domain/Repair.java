@@ -1,13 +1,17 @@
 package com.limbo.app.domain;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "repair")
+@org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class Repair {
 
 	@Id
@@ -40,23 +44,26 @@ public class Repair {
 	private String charger;
 
 	@Column(name = "CLIENT_FULLNAME")
+	@NotEmpty 
 	private String clientFullName;
 
 	@Column(name = "CLIENT_MOBILE_NUMBER")
 	private String clientMobileNumber;
-
+	
+	
 	@Column(name = "RECEIPT_DATE")
-	private String receiptDate;
+	private Date receiptDate;
 
 	@Column(name = "REPAIR_DATE")
-	private String repairDate;
+	private Date repairDate;
 
 	@Column(name = "RETURNED")
 	private boolean returned;
 
 	@Column(name = "RETURN_DATE")
-	private String returnDate;
-
+	private Date returnDate;
+	
+	@NotEmpty
 	@Column(name = "COMPLAINS")
 	private String complains;
 
@@ -160,19 +167,19 @@ public class Repair {
 		this.clientMobileNumber = clientMobileNumber;
 	}
 
-	public String getReceiptDate() {
+	public Date getReceiptDate() {
 		return receiptDate;
 	}
 
-	public void setReceiptDate(String receiptDate) {
+	public void setReceiptDate(Date receiptDate) {
 		this.receiptDate = receiptDate;
 	}
 
-	public String getRepairDate() {
+	public Date getRepairDate() {
 		return repairDate;
 	}
 
-	public void setRepairDate(String repairDate) {
+	public void setRepairDate(Date repairDate) {
 		this.repairDate = repairDate;
 	}
 
@@ -184,11 +191,11 @@ public class Repair {
 		this.returned = returned;
 	}
 
-	public String getReturnDate() {
+	public Date getReturnDate() {
 		return returnDate;
 	}
 
-	public void setReturnDate(String returnDate) {
+	public void setReturnDate(Date returnDate) {
 		this.returnDate = returnDate;
 	}
 

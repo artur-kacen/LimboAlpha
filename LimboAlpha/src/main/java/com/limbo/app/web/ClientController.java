@@ -28,7 +28,7 @@ public class ClientController {
 		return "clients";
 	}
 
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/clients/add", method = RequestMethod.POST)
 	public String addClient(@ModelAttribute("contact") Client client,
 			BindingResult result) {
 
@@ -37,7 +37,7 @@ public class ClientController {
 		return "redirect:/clients";
 	}
 
-	@RequestMapping("/delete/{clientId}")
+	@RequestMapping("/clients/delete/{clientId}")
 	public String deleteClient(@PathVariable("clientId") Integer clientId) {
 		logger.info("Client ID: " + clientId);
 		clientService.removeClient(clientId);

@@ -7,21 +7,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf8">
 	<title><spring:message code="label.title" /></title>
-	<style>
-		.errorblock {
-			color: #ff0000;
-			background-color: #ffEEEE;
-			border: 3px solid #ff0000;
-			padding: 8px,;
-			margin: 16px;			
-		}
-	</style>
+	<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" type="text/css" />
 </head>
 <body onload="document.f.j_username.focus()">
-
-<a href="<c:url value="/index" />">
-	<spring:message code="label.clients" />
-</a><br/>
 
 <c:if test="${not empty param.error}">
 	<div class="errorblock">

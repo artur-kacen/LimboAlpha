@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
- 
+
 import com.limbo.app.dao.RepairDAO;
 import com.limbo.app.domain.Repair;
+import com.limbo.app.domain.SystemUser;
  
 @Service
 public class RepairServiceImpl implements RepairService {
@@ -16,8 +17,8 @@ public class RepairServiceImpl implements RepairService {
     private RepairDAO repairDAO;
  
     @Transactional
-    public void addRepair(Repair repair) {
-    	repairDAO.addRepair(repair);
+    public void addRepair(Repair repair, SystemUser user) {
+    	repairDAO.addRepair(repair, user);
     }
     @Transactional
     public List<Repair> listRepair() { 
@@ -26,5 +27,13 @@ public class RepairServiceImpl implements RepairService {
     @Transactional
     public void removeRepair (Integer id) {
     	repairDAO.removeRepair(id);
+    }
+    @Transactional
+    public Repair getRepair(Integer id){
+    	return repairDAO.getRepair(id);
+    }
+    @Transactional
+    public void updateRepair(Repair repair){
+    	repairDAO.updateRepair(repair);
     }
 }

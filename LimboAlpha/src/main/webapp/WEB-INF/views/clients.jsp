@@ -11,10 +11,6 @@
 </head>
 <body>
 <jsp:include page="main.jsp" />
-<a href="<c:url value="/logout" />">
-	<spring:message code="label.logout" />
-</a>
-  
 <h2><spring:message code="label.title" /></h2>
 
 <form:form method="post" action="add" commandName="client">
