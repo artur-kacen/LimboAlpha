@@ -15,4 +15,10 @@ public interface RepairDAO {
     public Repair getRepair(Integer id);
     
     public void updateRepair(Repair repair);
+    
+    public void approveRepair(Integer id);
+    
+    public boolean isReturned(Integer id);
+    
+    public boolean isReturned(Repair repar);
 }

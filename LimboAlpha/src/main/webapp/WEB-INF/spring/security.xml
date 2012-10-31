@@ -14,6 +14,8 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 		<intercept-url pattern="/clients*" access="ROLE_SUPERADMIN"/>
 		<intercept-url pattern="/repair**" access="ROLE_USER"/>
 		<intercept-url pattern="/repair/*" access="ROLE_USER"/>
+		<intercept-url pattern="/repair/delete/*" access="ROLE_ADMIN,ROLE_SUPERADMIN"/>
+		<intercept-url pattern="/repair/update/*" access="ROLE_USER"/>
 		<form-login login-page="/login.jsp" default-target-url="/index" authentication-failure-url="/login.jsp?error=true"/>
 		<logout logout-url="/logout" logout-success-url="/index"/>		
 		<remember-me/>

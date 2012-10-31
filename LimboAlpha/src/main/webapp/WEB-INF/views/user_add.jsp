@@ -6,11 +6,8 @@
 
 <jsp:include page="main.jsp" />
 
-
-<form:form method="post" action="add" commandName="repair">
-	<form:label path="phone">
-		<spring:message code="label.repair_phone" />
-	</form:label>
+<form:form method="post" action="add" commandName="user">
+	<form:errors path="*" cssClass="errorblock" element="div" />
 	<br />
 	<table>
 		<tr>
@@ -66,7 +63,7 @@
 		<tr>
 			<td><form:input path="clientFullName" /></td>
 			<td><form:input path="clientMobileNumber" /></td>
-			<td><form:input path="receiptDate" class="datepicker"/></td>
+			<td><form:input path="receiptDate" class="datepicker" /></td>
 			<td><form:input path="repairDate"  class="datepicker"/></td>
 		</tr>
 		<tr>
@@ -92,7 +89,14 @@
 	<br />
 	<form:textarea path="complains" rows="10" cols="50"/>
 	<br />
-	<input type="submit" value="<spring:message code="label.repair_update"/>" />
+	<form:hidden path="id" />
+	<form:hidden path="phone" />
+	<form:hidden path="battery" />
+	<form:hidden path="returned" />
+	<form:hidden path="returnDate" />
+	<form:hidden path="warranty" />
+	<form:hidden path="userId" />
+	<input type="submit" value="<spring:message code="label.repair_addNew"/>" />
 </form:form>
 
 

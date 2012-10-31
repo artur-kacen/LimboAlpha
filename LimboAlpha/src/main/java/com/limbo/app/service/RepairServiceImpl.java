@@ -36,4 +36,18 @@ public class RepairServiceImpl implements RepairService {
     public void updateRepair(Repair repair){
     	repairDAO.updateRepair(repair);
     }
+    @Transactional
+    public void approveRepair(Integer id){
+    	repairDAO.approveRepair(id);
+    }
+    
+    @Transactional
+    public boolean isReturned(Integer id){
+    	return repairDAO.isReturned(id);
+    }
+    
+    
+    public boolean isReturned(Repair repar){
+    	return repairDAO.isReturned(repar);
+    }
 }

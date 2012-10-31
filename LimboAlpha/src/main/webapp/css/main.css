@@ -6,6 +6,20 @@
 	margin: 16px;
 }
 
+tr.returned_items td {
+	background-color: #ffEEEE;
+}
+
+tr.returned_items:hover td {
+	background-color: #A7FDFF;
+}
+
+tr.line_items:hover td {
+	background-color: #A7FDFF;
+}
+
+
+
 .error {
 	color: #ff0000;
 }

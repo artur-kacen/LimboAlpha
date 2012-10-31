@@ -1,5 +1,8 @@
 package com.limbo.app.dao;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.limbo.app.domain.Repair;
@@ -23,10 +26,10 @@ public class RepairDAOImpl implements RepairDAO {
 	public void addRepair(Repair repair, SystemUser user) {
 		//if (repair.get)
 		repair.setUserId(user.getId());
-		if (!repair.getBaterySerialNumber().isEmpty() && !repair.getBaterySerialNumber().equalsIgnoreCase("")){
+		if (repair.getBaterySerialNumber() != null && !repair.getBaterySerialNumber().isEmpty() && !repair.getBaterySerialNumber().equalsIgnoreCase("")){
 			repair.setBattery(true);
 		}
-		if (!repair.getPhoneManufacturer().isEmpty() || !repair.getPhoneModel().isEmpty()) {
+		if ((repair.getPhoneManufacturer() != null && !repair.getPhoneManufacturer().isEmpty()) || (repair.getPhoneModel() != null && !repair.getPhoneModel().isEmpty())) {
 			repair.setPhone(true);
 		}
 		sessionFactory.getCurrentSession().save(repair);
@@ -42,7 +45,8 @@ public class RepairDAOImpl implements RepairDAO {
 		Session session = sessionFactory.getCurrentSession();
 		Repair repair = (Repair) session.load(Repair.class, id);
 		if (null != repair) {
-			sessionFactory.getCurrentSession().delete(repair);
+			session.delete(repair);
+			session.flush();
 		}
 
 	}
@@ -53,12 +57,26 @@ public class RepairDAOImpl implements RepairDAO {
 		return repair;
 	}
 	
-	public void updateRepair(Repair repair){
-		
+	public void updateRepair(Repair repair){		
 		Session session = sessionFactory.getCurrentSession();
-		Transaction tx = session.beginTransaction();
-		session.update(repair);
-		tx.commit();
-
+		session.merge(repair);
+		session.flush();
+	}	
+	
+	public void approveRepair(Integer id){
+		Repair repair = getRepair(id);
+		repair.setReturned(true);
+		java.util.Date today = new java.util.Date();
+		Date date = new Date(today.getTime());
+		repair.setReturnDate(date);
+		updateRepair(repair);
+	}
+	
+	public boolean isReturned(Integer id){
+		return getRepair(id).isReturned();		
+	}
+	
+	public boolean isReturned(Repair repair){
+		return repair.isReturned();
 	}
 }

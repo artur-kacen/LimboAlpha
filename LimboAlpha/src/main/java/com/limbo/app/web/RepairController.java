@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.itextpdf.text.DocumentException;
 import com.limbo.app.domain.Repair;
 import com.limbo.app.domain.SystemUser;
 import com.limbo.app.pdf.RepairPDFGeneration;
@@ -39,36 +38,22 @@ public class RepairController {
 	private SystemUserService userService;
 
 	@RequestMapping("/repair/add")
-	public String addRepair(Map<String, Object> map) {		
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public String addRepair(Map<String, Object> map) {
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 		String name = user.getUsername();
 		logger.info("User name : " + name);
 		map.put("repair", new Repair());
-		
-		// map.put("repairList", repairService.listRepair());
-		return "repair_add";
-	}
-	
-	@RequestMapping("/repair/add/{repairId}")
-	public String addRepair(Map<String, Object> map, @PathVariable("repairId") Integer repairId) {
-		logger.info("Repear ID: " + repairId);
-		if (repairId != 0) {
-			map.put("repair", repairService.getRepair(repairId));
-			
-		} else {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String name = user.getUsername();
-		logger.info("User name : " + name);
-		map.put("repair", new Repair());
-		}
-		// map.put("repairList", repairService.listRepair());
 		return "repair_add";
 	}
 
+	
 	@RequestMapping(value = "/repair/add", method = RequestMethod.POST)
-	public String doAddRepair(@ModelAttribute("repair") @Valid Repair repair, BindingResult result) {
-		
-		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+	public String doAddRepair(@ModelAttribute("repair") @Valid Repair repair,
+			BindingResult result) {
+
+		if (SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal() instanceof User) {
 			User user = (User) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
 			String username = user.getUsername();
@@ -79,15 +64,26 @@ public class RepairController {
 
 	}
 	
-	@RequestMapping(value = "/repair/add/add", method = RequestMethod.POST)
-	public String test(@ModelAttribute("repair") @Valid Repair repair, BindingResult result) {
-		
-		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+	@RequestMapping("/repair/update/{repairId}")
+	public String updateRepair(Map<String, Object> map,
+			@PathVariable("repairId") Integer repairId) {
+		logger.info("Showing repair ID: " + repairId);
+		map.put("repairId", repairId);
+		map.put("repair", repairService.getRepair(repairId));
+		return "repair_update";
+	}
+
+	@RequestMapping(value = "/repair/update/add", method = RequestMethod.POST)
+	public String doUpdateRepair(
+			@ModelAttribute("repair") @Valid Repair repair, BindingResult result) {
+
+		if (SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal() instanceof User) {
 			User user = (User) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
+			// Create logging who did last change
 			String username = user.getUsername();
 			SystemUser systemUser = userService.getUserByUsername(username);
-			//repairService.addRepair(repair, systemUser);
 			repairService.updateRepair(repair);
 		}
 		return "redirect:/repair/list";
@@ -97,30 +93,19 @@ public class RepairController {
 	@RequestMapping("/repair/list")
 	public String listRepair(Map<String, Object> map) {
 		map.put("repairList", repairService.listRepair());
+		map.put("repairService", repairService);
 		return "repair_list";
 	}
-
-	/*@RequestMapping("/repair/save/{repairId}")
-	public String showRepair(@PathVariable("repairId") Integer repairId,
-			Map<String, Object> map) {
-		map.put("repair", repairService.getRepair(repairId));
-		return "repair_save";
-	}
-
-	@RequestMapping(value = "/repair/save", method = RequestMethod.POST)
-	public String updateRepair(@ModelAttribute("repair") Repair repair, BindingResult result) {
-		logger.info("Client ID: " + repair.getUserId());
-		repairService.updateRepair(repair);
-		return "redirect:/repair/list";
-	}*/
-
+	
+	
 	@RequestMapping("/repair/getpdf/{repairId}")
 	public String getPDF(@PathVariable("repairId") Integer repairId,
 			Map<String, Object> map, HttpServletRequest request,
 			HttpServletResponse response) {
 		logger.info("PDF generation for ID: " + repairId);
-		
-		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+
+		if (SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal() instanceof User) {
 			RepairPDFGeneration pdf = new RepairPDFGeneration();
 			User user = (User) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
@@ -135,13 +120,37 @@ public class RepairController {
 		}
 		return "repair_list";
 	}
-	/*
-	 * @RequestMapping("/delete/{clientId}") public String
-	 * deleteClient(@PathVariable("clientId") Integer clientId) {
-	 * logger.info("Client ID: " + clientId);
-	 * clientService.removeClient(clientId);
-	 * 
-	 * return "redirect:/clients"; }
-	 */
+	
+	@RequestMapping("/repair/approve/{repairId}")
+	public String approveRepair(@PathVariable("repairId") Integer repairId) {
+		if (!repairService.isReturned(repairId)){
+			logger.info("Approving repair ID: " + repairId);
+			repairService.approveRepair(repairId);
+		}
+		return "redirect:/repair/list";
+	}
+
+	@RequestMapping("/repair/delete/{repairId}")
+	public String deleteClient(@PathVariable("repairId") Integer repairId) {
+		logger.info("Deleting repair with ID: " + repairId);
+		repairService.removeRepair(repairId);
+		return "redirect:/repair/list";
+	}
+	
+	/*@RequestMapping("/repair/test")
+	public String addManyRecords() {
+		
+		for (int i = 995; i < 10000; i++){
+			Repair repair = new Repair();
+			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			String username = user.getUsername();
+			repair.setId(i);
+			SystemUser systemUser = userService.getUserByUsername(username);
+			repairService.addRepair(repair, systemUser);
+			logger.info("Adding number: " + i);
+		}
+		logger.info("Done!");
+		return "repair_list";
+	}*/
 
 }
