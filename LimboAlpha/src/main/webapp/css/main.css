@@ -7,7 +7,7 @@
 }
 
 tr.returned_items td {
-	background-color: #ffEEEE;
+	background-color: #F52323;
 }
 
 tr.returned_items:hover td {
