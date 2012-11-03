@@ -1,3 +1,6 @@
+body{ 
+    background-image: url(http://localhost:8080/LimboAlpha/images/248036-1680x1050.jpg); 
+} 
 .errorblock {
 	color: #ff0000;
 	background-color: #ffEEEE;
@@ -6,16 +9,35 @@
 	margin: 16px;
 }
 
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
 tr.returned_items td {
-	background-color: #F52323;
+	background-color: #18B909;
+}
+tr.returned_item2s td input {
+	border: 0; padding: 0; spacing: 0; margin: 0;
 }
 
 tr.returned_items:hover td {
-	background-color: #A7FDFF;
+	background-color: #C6E000;
+	bgcolor: #2999C6;
+}
+
+tr.repaired_item td {
+	background-color: #B52121;
+	bgcolor: #F52323;
+}
+
+tr.repaired_item:hover td {
+	background-color: #C6E000;
+	bgcolor: #2999C6;
 }
 
 tr.line_items:hover td {
-	background-color: #A7FDFF;
+	background-color: #C6E000;
+	bgcolor: #2999C6;
 }
 
 

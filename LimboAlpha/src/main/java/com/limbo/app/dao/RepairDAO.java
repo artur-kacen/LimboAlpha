@@ -17,8 +17,12 @@ public interface RepairDAO {
     public void updateRepair(Repair repair);
     
     public void approveRepair(Integer id);
+        
+    public boolean isReturned(Repair repair);
+       
+    public boolean isRepaired(Repair repair);
     
-    public boolean isReturned(Integer id);
+    public List<Repair> listReturnedRepair(boolean isReturned);
     
-    public boolean isReturned(Repair repar);
+    public List<Repair> listDoneRepair();
 }

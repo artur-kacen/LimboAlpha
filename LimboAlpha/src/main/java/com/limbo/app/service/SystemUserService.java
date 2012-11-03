@@ -13,7 +13,7 @@ public interface SystemUserService {
     
     public SystemUser getUser(Integer id);
     
-    public void updateUser(SystemUser repair);
+    public void updateUser(SystemUser user);
     
     public SystemUser getUserByUsername(String username);
 }

@@ -1,6 +1,5 @@
 package com.limbo.app.pdf;
 
-import java.awt.Color;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,17 +7,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.limbo.app.domain.Repair;
 import com.limbo.app.domain.SystemUser;
+import com.limbo.app.service.SystemUserService;
+import com.limbo.app.service.SystemUserServiceImpl;
 
 
 public class RepairPDFGeneration {
@@ -27,7 +24,7 @@ public class RepairPDFGeneration {
 
 	
 	
-	public void fill(HttpServletRequest request, HttpServletResponse response, Repair repair, SystemUser user) throws IOException, DocumentException {
+	public void fill(HttpServletRequest request, HttpServletResponse response, Repair repair, SystemUser currentUser, SystemUser creator) throws IOException, DocumentException {
 		PdfReader reader;
 		response.setHeader("Content-disposition", "attachment; filename="+  repair.getId()  +".pdf");
 		reader = new PdfReader(DATASHEET);
@@ -50,46 +47,67 @@ public class RepairPDFGeneration {
 		cb.beginText();
 		cb.setFontAndSize(bf, 12);
 		
-		cb.setTextMatrix(82, 725);
+		cb.setTextMatrix(85, 723);
         cb.showText(repair.getId().toString());
         
-        cb.setTextMatrix(138, 700);
+        cb.setTextMatrix(138, 697);
         if (repair.getReceiptDate() != null)
         	cb.showText(repair.getReceiptDate().toString());
         
-        cb.setTextMatrix(169, 674);
+        cb.setTextMatrix(169, 671);
         if (repair.getRepairDate() != null)
         	cb.showText(repair.getRepairDate().toString());
 		
-		cb.setTextMatrix(82, 649);
-        cb.showText(user.getName() + " " + user.getSurname());
+		cb.setTextMatrix(82, 646);		
+        cb.showText(creator.getName() + " " + creator.getSurname());
         
-        cb.setTextMatrix(75, 598);
+        cb.setTextMatrix(75, 595);
         cb.showText(repair.getClientFullName());
         
-        cb.setTextMatrix(170, 547);
-        cb.showText(repair.getPhoneManufacturer());
+        cb.setTextMatrix(152, 570);
+        cb.showText(repair.getClientMobileNumber());
         
-        cb.setTextMatrix(87, 521);
+        cb.setTextMatrix(170, 544);
+        cb.showText(repair.getPhoneManufacturer() + " " + repair.getPhoneModel());
+        
+        cb.setTextMatrix(87, 518);
         if (repair.getWarrantyPeriod() != 0)
         	cb.showText(Integer.toString(repair.getWarrantyPeriod()));
         
-        cb.setTextMatrix(90, 496);
+        cb.setTextMatrix(90, 493);
         cb.showText(repair.getImei());
         
-        cb.setTextMatrix(106, 472);
+        cb.setTextMatrix(106, 468);
         cb.showText(repair.getPhoneSecurityCode());
         
-        cb.setTextMatrix(109, 445);
-        cb.showText("MT.");
+        cb.setTextMatrix(129, 442);
+        if (repair.isPhone())
+        	cb.showText("X");
+        cb.setTextMatrix(179, 442);
+        if (repair.isBattery());
+        	cb.showText("X");
+        //if (repair.)
         
-        cb.setTextMatrix(33, 403);
-        cb.showText(repair.getComplains());
+        cb.setTextMatrix(33, 400);
+        Integer start = 400;
+        String complain = repair.getComplains();
+        //complain.split("(?<=\\G.{110})");
+        for (String text: complain.split("(?<=\\G.{110})")){
+        	cb.setTextMatrix(33, start);
+        	cb.showText(text);
+        	start-=12;
+        }
+        
 
-        cb.setTextMatrix(120, 165);
+        cb.setTextMatrix(120, 173);
         if (repair.getPaymentAmount() != null)
-        	cb.showText(repair.getPaymentAmount().toString());
-
+        	cb.showText(repair.getPaymentAmount().toString() + " Ls");
+        
+        cb.setTextMatrix(257, 148);
+        cb.showText(repair.getClientFullName());
+        
+        cb.setTextMatrix(345, 122);
+        cb.showText(currentUser.getName() + "  " + currentUser.getSurname());
         // we tell the contentByte, we've finished drawing text
         cb.endText();
         cb.addTemplate(page, 0, 0);

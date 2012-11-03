@@ -18,8 +18,12 @@ public interface RepairService {
     public void updateRepair(Repair repair);
     
     public void approveRepair(Integer id);
-    
-    public boolean isReturned(Integer id);
-    
+       
     public boolean isReturned(Repair repar);
+    
+    public List<Repair> listReturnedRepair(boolean isReturned);
+    
+    public List<Repair> listDoneRepair();
+    
+    public boolean isRepaired(Repair repair);
 }

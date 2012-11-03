@@ -1,8 +1,6 @@
 package com.limbo.app.dao;
 
 import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.limbo.app.domain.Repair;
@@ -11,7 +9,6 @@ import com.limbo.app.domain.SystemUser;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -71,12 +68,32 @@ public class RepairDAOImpl implements RepairDAO {
 		repair.setReturnDate(date);
 		updateRepair(repair);
 	}
-	
-	public boolean isReturned(Integer id){
-		return getRepair(id).isReturned();		
-	}
-	
+		
 	public boolean isReturned(Repair repair){
 		return repair.isReturned();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Repair> listReturnedRepair(boolean isReturned) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		Query query =  session.createQuery("from Repair where returned = :returned");
+		query.setParameter("returned", isReturned);
+		return query.list();
+	}	
+
+	@SuppressWarnings("unchecked")
+	public List<Repair> listDoneRepair() {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		Query query =  session.createQuery("from Repair where repairDate is not null");
+		return query.list();
+	}
+
+	public boolean isRepaired(Repair repair) {
+		if (repair.getRepairDate() != null){
+			return true;
+		}
+		return false;
 	}
 }

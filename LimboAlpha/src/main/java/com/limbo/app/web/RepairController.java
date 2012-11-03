@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -92,7 +91,33 @@ public class RepairController {
 
 	@RequestMapping("/repair/list")
 	public String listRepair(Map<String, Object> map) {
+		return "redirect:/repair/list/all"; 
+	}
+	
+	@RequestMapping("/repair/list/all")
+	public String listAllRepair(Map<String, Object> map) {
 		map.put("repairList", repairService.listRepair());
+		map.put("repairService", repairService);
+		return "repair_list";
+	}
+	
+	@RequestMapping("/repair/list/repaired")
+	public String listRepairedRepair(Map<String, Object> map) {
+		map.put("repairList", repairService.listDoneRepair());
+		map.put("repairService", repairService);
+		return "repair_list";
+	}
+	
+	@RequestMapping("/repair/list/returned")
+	public String listReturnedRepair(Map<String, Object> map) {
+		map.put("repairList", repairService.listReturnedRepair(true));
+		map.put("repairService", repairService);
+		return "repair_list";
+	}
+	
+	@RequestMapping("/repair/list/notreturned")
+	public String listNotReturnedRepair(Map<String, Object> map) {
+		map.put("repairList", repairService.listReturnedRepair(false));
 		map.put("repairService", repairService);
 		return "repair_list";
 	}
@@ -110,10 +135,11 @@ public class RepairController {
 			User user = (User) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
 			String username = user.getUsername();
-			SystemUser systemUser = userService.getUserByUsername(username);
+			SystemUser currentUser = userService.getUserByUsername(username);
+			Repair repair = repairService.getRepair(repairId); 
+			SystemUser creator = userService.getUser(repair.getUserId());
 			try {
-				pdf.fill(request, response, repairService.getRepair(repairId),
-						systemUser);
+				pdf.fill(request, response, repair, currentUser, creator);
 			} catch (Exception e) {
 				logger.info("Failed 2: " + e);
 			}
@@ -123,7 +149,8 @@ public class RepairController {
 	
 	@RequestMapping("/repair/approve/{repairId}")
 	public String approveRepair(@PathVariable("repairId") Integer repairId) {
-		if (!repairService.isReturned(repairId)){
+		Repair repair = repairService.getRepair(repairId);
+		if (!repairService.isReturned(repair)){
 			logger.info("Approving repair ID: " + repairId);
 			repairService.approveRepair(repairId);
 		}
