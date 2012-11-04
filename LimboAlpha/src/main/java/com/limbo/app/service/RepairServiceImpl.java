@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Validator;
+
 import com.limbo.app.dao.RepairDAO;
+import com.limbo.app.domain.DeletedRepairs;
 import com.limbo.app.domain.Repair;
 import com.limbo.app.domain.SystemUser;
 
@@ -59,8 +62,18 @@ public class RepairServiceImpl implements RepairService {
 	public List<Repair> listDoneRepair() {
 		return repairDAO.listDoneRepair();
 	}
-    
-    public boolean isRepaired(Repair repair){
-    	return repairDAO.isRepaired(repair);
-    }
+
+	public boolean isRepaired(Repair repair) {
+		return repairDAO.isRepaired(repair);
+	}
+
+	public List<DeletedRepairs> listDeletedRepairs() {
+		// TODO Auto-generated method stub
+		return repairDAO.listDeletedRepairs();
+	}
+
+	public void repairRepair(Integer id) {
+		// TODO Auto-generated method stub
+		repairDAO.repairRepair(id);		
+	}
 }

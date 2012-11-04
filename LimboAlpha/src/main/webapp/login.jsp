@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf8">
 <title><spring:message code="label.title" /></title>
-<link href="${pageContext.request.contextPath}/css/login.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/css/structure.css" rel="stylesheet" type="text/css" />
 <link href="/LimboAlpha/css/main.css" rel="stylesheet" type="text/css" />
 	
 </head>
@@ -18,22 +19,17 @@
 			: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
 		</div>
 	</c:if>
-	<form class="form-container" name="f" method="POST" action="<c:url value="/j_spring_security_check" />">
-		<div class="form-title">
-			<h2></h2>
-		</div>
-		<div class="form-title"><spring:message code="label.nickname" /></div>
-		<input class="form-field" type="text" name="j_username"  name="firstname" /><br />
-		<div class="form-title"><spring:message code="label.password" /></div>
-		<input type="password" class="form-field" name="j_password" /><br />
-		
-		<div class="submit-container">
-			<input class="submit-button" type="submit" value="<spring:message code="label.login"/>"  />
-			<div class="form-remember-title"><spring:message code="label.remember"/>
-				<input type="checkbox" name="_spring_security_remember_me" />
-			</div>			
-		</div>
-		
+	<form class="box login" name="f" method="POST" action="<c:url value="/j_spring_security_check" />">
+		<fieldset class="boxBody">
+		  <label><spring:message code="label.nickname" /></label>
+		  <input type="text" tabindex="1" placeholder="<spring:message code="label.nickname"/>" name="j_username"  name="firstname" required>
+		  <label><spring:message code="label.password" /></label>
+		  <input type="password" name="j_password" tabindex="2" required>
+		</fieldset>
+		<footer>
+		  <label><input type="checkbox" tabindex="3"><spring:message code="label.remember"/></label>
+		  <input type="submit" class="btnLogin" value="<spring:message code="label.login"/>"  tabindex="4">
+		</footer>
 	</form>
 </body>
 </html>

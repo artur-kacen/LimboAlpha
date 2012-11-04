@@ -1,6 +1,5 @@
 package com.limbo.app.web;
 
-import javax.validation.Valid;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,10 +36,14 @@ public class RepairController {
 	@Autowired
 	private SystemUserService userService;
 
+	@RequestMapping("/repair")
+	public String redirectRepair(){
+		return "redirect:/repair/list";
+	}
+	
 	@RequestMapping("/repair/add")
 	public String addRepair(Map<String, Object> map) {
-		User user = (User) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String name = user.getUsername();
 		logger.info("User name : " + name);
 		map.put("repair", new Repair());
@@ -48,15 +52,13 @@ public class RepairController {
 
 	
 	@RequestMapping(value = "/repair/add", method = RequestMethod.POST)
-	public String doAddRepair(@ModelAttribute("repair") @Valid Repair repair,
-			BindingResult result) {
+	public String doAddRepair(@ModelAttribute("repair") Repair repair, BindingResult result) {
 
-		if (SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal() instanceof User) {
-			User user = (User) SecurityContextHolder.getContext()
-					.getAuthentication().getPrincipal();
+		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			String username = user.getUsername();
 			SystemUser systemUser = userService.getUserByUsername(username);
+			logger.info("amount = " + repair.getPaymentAmount());
 			repairService.addRepair(repair, systemUser);
 		}
 		return "redirect:/repair/list";
@@ -74,15 +76,15 @@ public class RepairController {
 
 	@RequestMapping(value = "/repair/update/add", method = RequestMethod.POST)
 	public String doUpdateRepair(
-			@ModelAttribute("repair") @Valid Repair repair, BindingResult result) {
+			@ModelAttribute("repair") Repair repair, BindingResult result) {
 
 		if (SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal() instanceof User) {
-			User user = (User) SecurityContextHolder.getContext()
-					.getAuthentication().getPrincipal();
+			//User user = (User) SecurityContextHolder.getContext()
+			//		.getAuthentication().getPrincipal();
 			// Create logging who did last change
-			String username = user.getUsername();
-			SystemUser systemUser = userService.getUserByUsername(username);
+			//String username = user.getUsername();
+			//SystemUser systemUser = userService.getUserByUsername(username);
 			repairService.updateRepair(repair);
 		}
 		return "redirect:/repair/list";
@@ -122,6 +124,13 @@ public class RepairController {
 		return "repair_list";
 	}
 	
+	@RequestMapping("/repair/list/deleted")
+	public String listDeletedRepairs(Map<String, Object> map) {
+		map.put("deletedRepairList", repairService.listDeletedRepairs());
+		map.put("repairService", repairService);
+		return "repair_deleted";
+	}
+	
 	
 	@RequestMapping("/repair/getpdf/{repairId}")
 	public String getPDF(@PathVariable("repairId") Integer repairId,
@@ -153,6 +162,15 @@ public class RepairController {
 		if (!repairService.isReturned(repair)){
 			logger.info("Approving repair ID: " + repairId);
 			repairService.approveRepair(repairId);
+		}
+		return "redirect:/repair/list";
+	}
+	
+	@RequestMapping("/repair/repair/{repairId}")
+	public String repairRepair(@PathVariable("repairId") Integer repairId) {
+		Repair repair = repairService.getRepair(repairId);
+		if (repair.getRepairDate() == null){
+			repairService.repairRepair(repairId);
 		}
 		return "redirect:/repair/list";
 	}

@@ -2,6 +2,7 @@ package com.limbo.app.service;
 
 import java.util.List;
 
+import com.limbo.app.domain.DeletedRepairs;
 import com.limbo.app.domain.Repair;
 import com.limbo.app.domain.SystemUser;
 
@@ -26,4 +27,8 @@ public interface RepairService {
     public List<Repair> listDoneRepair();
     
     public boolean isRepaired(Repair repair);
+    
+    public List<DeletedRepairs> listDeletedRepairs();
+    
+    public void repairRepair(Integer id);
 }

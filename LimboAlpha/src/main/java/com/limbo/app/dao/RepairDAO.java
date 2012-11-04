@@ -1,6 +1,8 @@
 package com.limbo.app.dao;
 
 import java.util.List;
+
+import com.limbo.app.domain.DeletedRepairs;
 import com.limbo.app.domain.Repair;
 import com.limbo.app.domain.SystemUser;
 
@@ -25,4 +27,8 @@ public interface RepairDAO {
     public List<Repair> listReturnedRepair(boolean isReturned);
     
     public List<Repair> listDoneRepair();
+    
+    public List<DeletedRepairs> listDeletedRepairs();
+    
+    public void repairRepair(Integer id);
 }

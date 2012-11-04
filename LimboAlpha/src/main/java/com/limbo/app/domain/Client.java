@@ -16,6 +16,7 @@ public class Client {
     private Integer id;
 
     @Column(name = "NAME", unique = true, nullable = false)
+    
     private String name;
 
     @Column(name = "PVN_NUMBER", unique = true, nullable = false, length = 21)

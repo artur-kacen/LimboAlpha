@@ -7,7 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "repair")
@@ -41,10 +42,11 @@ public class Repair {
 	private String baterySerialNumber;
 
 	@Column(name = "CHARGER")
-	private String charger;
+	private boolean charger;
 
 	@Column(name = "CLIENT_FULLNAME")
-	@NotEmpty 
+	@NotNull
+    @Size(max=5) 
 	private String clientFullName;
 
 	@Column(name = "CLIENT_MOBILE_NUMBER")
@@ -63,21 +65,21 @@ public class Repair {
 	@Column(name = "RETURN_DATE")
 	private Date returnDate;
 	
-	@NotEmpty
+	
 	@Column(name = "COMPLAINS")
 	private String complains;
 
 	@Column(name = "PAYMENT_AMOUNT")
-	private Double paymentAmount;
+	private Integer paymentAmount;
 
 	@Column(name = "WARRANTY")
 	private boolean warranty;
 
 	@Column(name = "WARRANTY_PERIOD")
-	private int warrantyPeriod;
+	private Integer warrantyPeriod;
 
 	@Column(name = "USER_ID")
-	private int userId;
+	private Integer userId;
 
 	public Integer getId() {
 		return id;
@@ -143,11 +145,11 @@ public class Repair {
 		this.baterySerialNumber = baterySerialNumber;
 	}
 
-	public String getCharger() {
+	public boolean getCharger() {
 		return charger;
 	}
 
-	public void setCharger(String charger) {
+	public void setCharger(boolean charger) {
 		this.charger = charger;
 	}
 
@@ -207,11 +209,11 @@ public class Repair {
 		this.complains = complains;
 	}
 
-	public Double getPaymentAmount() {
+	public Integer getPaymentAmount() {
 		return paymentAmount;
 	}
 
-	public void setPaymentAmount(Double paymentAmount) {
+	public void setPaymentAmount(Integer paymentAmount) {
 		this.paymentAmount = paymentAmount;
 	}
 
@@ -223,19 +225,19 @@ public class Repair {
 		this.warranty = warranty;
 	}
 
-	public int getWarrantyPeriod() {
+	public Integer getWarrantyPeriod() {
 		return warrantyPeriod;
 	}
 
-	public void setWarrantyPeriod(int warrantyPeriod) {
+	public void setWarrantyPeriod(Integer warrantyPeriod) {
 		this.warrantyPeriod = warrantyPeriod;
 	}
 
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 

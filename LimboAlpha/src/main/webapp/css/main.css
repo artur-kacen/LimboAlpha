@@ -1,6 +1,19 @@
-body{ 
-    background-image: url(http://localhost:8080/LimboAlpha/images/248036-1680x1050.jpg); 
-} 
+body {
+	background: #eee
+		url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAMAAAC6sdbXAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF3d3d////riJKgAAAAAJ0Uk5T/wDltzBKAAAAFUlEQVR42mJgBAEGGMmAxAYCgAADAAGGABmnk/7aAAAAAElFTkSuQmCC);
+	font: 13px 'trebuchet MS', Arial, Helvetica;
+}
+
+h2,p {
+	text-align: center;
+	color: #444;
+	text-shadow: 0 1px 0 #fff;
+}
+
+a {
+	color: #2A679F;
+}
+
 .errorblock {
 	color: #ff0000;
 	background-color: #ffEEEE;
@@ -39,8 +52,9 @@ tr.line_items:hover td {
 	background-color: #C6E000;
 	bgcolor: #2999C6;
 }
-
-
+fieldset{
+	width: 550px;
+}
 
 .error {
 	color: #ff0000;

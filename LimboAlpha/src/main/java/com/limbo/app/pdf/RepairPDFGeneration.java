@@ -14,8 +14,6 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.limbo.app.domain.Repair;
 import com.limbo.app.domain.SystemUser;
-import com.limbo.app.service.SystemUserService;
-import com.limbo.app.service.SystemUserServiceImpl;
 
 
 public class RepairPDFGeneration {
@@ -41,7 +39,7 @@ public class RepairPDFGeneration {
 		
 		// Now, add it to the blank PDF document we've opened
 		PdfContentByte cb = writer.getDirectContent();
-		BaseFont bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, false);
+		BaseFont bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1257, false);
 		//cb.addTemplate(page, 0, 0);
 		
 		cb.beginText();
@@ -71,7 +69,7 @@ public class RepairPDFGeneration {
         cb.showText(repair.getPhoneManufacturer() + " " + repair.getPhoneModel());
         
         cb.setTextMatrix(87, 518);
-        if (repair.getWarrantyPeriod() != 0)
+        if (repair.getWarrantyPeriod() != null)
         	cb.showText(Integer.toString(repair.getWarrantyPeriod()));
         
         cb.setTextMatrix(90, 493);
@@ -86,13 +84,14 @@ public class RepairPDFGeneration {
         cb.setTextMatrix(179, 442);
         if (repair.isBattery());
         	cb.showText("X");
-        //if (repair.)
-        
+        cb.setTextMatrix(227, 442);	
+        if (repair.getCharger())
+        	cb.showText("X");
         cb.setTextMatrix(33, 400);
         Integer start = 400;
         String complain = repair.getComplains();
         //complain.split("(?<=\\G.{110})");
-        for (String text: complain.split("(?<=\\G.{110})")){
+        for (String text: complain.split("(?<=\\G.{100})")){
         	cb.setTextMatrix(33, start);
         	cb.showText(text);
         	start-=12;
@@ -100,8 +99,11 @@ public class RepairPDFGeneration {
         
 
         cb.setTextMatrix(120, 173);
-        if (repair.getPaymentAmount() != null)
-        	cb.showText(repair.getPaymentAmount().toString() + " Ls");
+        if (repair.getPaymentAmount() != null){
+        	String amount = repair.getPaymentAmount().toString();        
+        	cb.showText(amount.substring(0, amount.length() - 2) + "," + amount.substring(amount.length() - 2) + " Ls");
+        }
+        	
         
         cb.setTextMatrix(257, 148);
         cb.showText(repair.getClientFullName());
@@ -117,6 +119,7 @@ public class RepairPDFGeneration {
 
 		// Done!
 		document.close();
+		response.getOutputStream().close();
 
 	}
 }

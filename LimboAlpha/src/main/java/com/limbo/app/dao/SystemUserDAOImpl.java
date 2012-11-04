@@ -34,6 +34,7 @@ public class SystemUserDAOImpl implements SystemUserDAO {
 		SystemUser user = (SystemUser) session.load(SystemUser.class, id);
 		if (null != user) {
 			sessionFactory.getCurrentSession().delete(user);
+			session.flush();
 		}
 
 	}
@@ -47,6 +48,7 @@ public class SystemUserDAOImpl implements SystemUserDAO {
 	public void updateUser(SystemUser user){
 		Session session = sessionFactory.getCurrentSession();
 		session.update(user);
+		session.flush();
 	}
 	
 	public SystemUser getUserByUsername(String username){
