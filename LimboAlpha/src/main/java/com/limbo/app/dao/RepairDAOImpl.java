@@ -41,7 +41,7 @@ public class RepairDAOImpl implements RepairDAO {
 			repair.setReceiptDate(getCurrentDat());
 		}
 		
-		repair.setComplains(repair.getComplains().replaceAll("\n", " "));
+		//repair.setComplains(repair.getComplains().replaceAll("\n", " "));
 		
 		
 		return repair;

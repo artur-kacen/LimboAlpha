@@ -1,6 +1,7 @@
 package com.limbo.app.pdf;
 
 import java.io.IOException;
+import java.util.regex.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,7 @@ public class RepairPDFGeneration {
 		// Now, add it to the blank PDF document we've opened
 		PdfContentByte cb = writer.getDirectContent();
 		BaseFont bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1257, false);
+		
 		//cb.addTemplate(page, 0, 0);
 		
 		cb.beginText();
@@ -90,13 +92,16 @@ public class RepairPDFGeneration {
         cb.setTextMatrix(33, 400);
         Integer start = 400;
         String complain = repair.getComplains();
+        Matcher matcher = Pattern.compile(".{1,150}+", Pattern.MULTILINE).matcher(complain);
         //complain.split("(?<=\\G.{110})");
-        for (String text: complain.split("(?<=\\G.{100})")){
+       // for (String text: complain.split("(?<=\\G.{100})")){
+        cb.setFontAndSize(bf, 9);
+        while (matcher.find()){
         	cb.setTextMatrix(33, start);
-        	cb.showText(text);
+        	cb.showText(matcher.group());
         	start-=12;
         }
-        
+        cb.setFontAndSize(bf, 12);
 
         cb.setTextMatrix(120, 173);
         if (repair.getPaymentAmount() != null){

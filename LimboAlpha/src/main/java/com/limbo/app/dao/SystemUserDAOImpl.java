@@ -4,6 +4,7 @@ import java.util.List;
 
 
 import com.limbo.app.domain.SystemUser;
+import com.limbo.app.domain.UserRoles;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -20,7 +21,12 @@ public class SystemUserDAOImpl implements SystemUserDAO {
 	
 	public void addUser(SystemUser user) {
 		//if (repair.get)
+		user.setEnabled(true);
+		UserRoles ur = new UserRoles();
+		ur.setRoleId(1);				
 		sessionFactory.getCurrentSession().save(user);
+		ur.setUserId(user.getId());
+		sessionFactory.getCurrentSession().save(ur);
 	}
 
 	@SuppressWarnings("unchecked")

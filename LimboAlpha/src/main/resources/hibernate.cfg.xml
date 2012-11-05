@@ -9,5 +9,6 @@
 		<mapping class="com.limbo.app.domain.Repair"/>
 		<mapping class="com.limbo.app.domain.DeletedRepairs"/>
 		<mapping class="com.limbo.app.domain.SystemUser"/>
+		<mapping class="com.limbo.app.domain.UserRoles"/>
 	</session-factory>
 </hibernate-configuration>

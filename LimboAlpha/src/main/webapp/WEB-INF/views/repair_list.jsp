@@ -5,26 +5,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="main.jsp" />
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
 
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/editablegrid.css" type="text/css" media="screen">
-		
-		<style>
-			body { font-family:'lucida grande', tahoma, verdana, arial, sans-serif; font-size:11px; }
-			h1 { font-size: 15px; }
-			a { color: #548dc4; text-decoration: none; }
-			a:hover { text-decoration: underline; }
-			table.testgrid { border-collapse: collapse; border: 1px solid #CCB; width: 900px; }
-			table.testgrid td, table.testgrid th { padding: 5px; border: 1px solid #E0E0E0; }
-			table.testgrid th { background: #E5E5E5; text-align: center; }
-			input.invalid { background: red; color: #FDFDFD; }
-		</style>	
-	</head>
-	
-	<body>
 		<CENTER>
 		<table id="htmlgrid" class="testgrid">
 			<tr>
@@ -66,9 +47,9 @@
 				<td><a href="<c:url value="/repair/getpdf/${repair.id}" />"><img src="${pageContext.request.contextPath}/images/pdf_icon.png" alt="get pdf"></a></td>
 				<td><a href="<c:url value="/repair/update/${repair.id}" />"><img src="${pageContext.request.contextPath}/images/edit_icon.png" alt="EDIT"></a></td>
 				<td>${repair.id}</td>
-				<td>${repair.clientFullName}</td>
-				<td>${repair.clientMobileNumber}</td>
-				<td>${repair.complains}</td>
+				<td WIDTH="10%">${repair.clientFullName}</td>
+				<td WIDTH="7%">${repair.clientMobileNumber}</td>
+				<td WIDTH="20%">${repair.complains}</td>
 				<td WIDTH="8%">${repair.receiptDate}</td>
 				<td WIDTH="8%">${repair.repairDate}</td>
 				<td>${repair.phoneManufacturer}</td>

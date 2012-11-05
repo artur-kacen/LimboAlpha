@@ -7,7 +7,7 @@
 <jsp:include page="main.jsp" />
 
 
-<form:form method="post" action="add" commandName="repair">
+<form:form method="post" action="add" commandName="repair" onsubmit="onSubmitRepair()">
 	<CENTER>
 	<h1><spring:message code="label.repair_id" />: ${repairId}</h1>
 		<fieldset>
@@ -96,7 +96,7 @@
 				<tr>
 					<td><form:input path="receiptDate" class="datepicker" /></td>
 					<td><form:input path="repairDate" class="datepicker" /></td>
-					<td><form:input path="paymentAmount" /></td>
+					<td><form:input path="paymentAmount" pattern="[0-9]*[\.|\,][0-9]{2}" /></td>
 				</tr>
 			</table>
 		</fieldset>

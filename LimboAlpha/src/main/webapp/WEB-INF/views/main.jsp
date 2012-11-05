@@ -10,34 +10,52 @@
 <html>
 <head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/editablegrid.css" type="text/css" media="screen">
+		
+	<style>
+		body { font-family:'lucida grande', tahoma, verdana, arial, sans-serif; font-size:11px; }
+		h1 { font-size: 15px; }
+		a { color: #548dc4; text-decoration: none; }
+		a:hover { text-decoration: underline; }
+		table.testgrid { border-collapse: collapse; border: 1px solid #CCB; width: 1100px; }
+		table.testgrid td, table.testgrid th { padding: 5px; border: 1px solid #E0E0E0; }
+		table.testgrid th { background: #E5E5E5; text-align: center; }
+		input.invalid { background: red; color: #FDFDFD; }
+	</style>	
 
-<link rel="stylesheet"
-	href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
-<link href="${pageContext.request.contextPath}/css/menu.css"
-	rel="stylesheet" type="text/css" />
-<link href="${pageContext.request.contextPath}/css/main.css"
-	rel="stylesheet" type="text/css" />
-<title><spring:message code="label.title" /></title>
-
-<script>
-	$(function() {
-		$(".datepicker").datepicker({
-			dateFormat : 'yy-mm-dd'
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+	<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+	<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+	<link href="${pageContext.request.contextPath}/css/menu.css"
+		rel="stylesheet" type="text/css" />
+	<link href="${pageContext.request.contextPath}/css/main.css"
+		rel="stylesheet" type="text/css" />
+	<title><spring:message code="label.title" /></title>
+	
+	<script>
+		$(function() {
+			$(".datepicker").datepicker({
+				dateFormat : 'yy-mm-dd'
+			});
 		});
-	});
-	function onSubmitRepair(){
-		var amount = document.forms["repair"]["paymentAmount"].value;
-		amount = amount.replace(",", "");
-		amount = amount.repalce(".", "");
-		document.forms["repair"]["paymentAmount"].value = amount;
-		alert(document.forms["repair"]["paymentAmount"].value);
-	}
-</script>
+		function onSubmitRepair(){
+			var amount = document.forms["repair"]["paymentAmount"].value;
+			if (amount != ""){			
+				amount = amount.replace(/[^0-9]/gi, "");
+				document.forms["repair"]["paymentAmount"].value = amount;			
+			}
+		}
+		function replaceRepairAmount(){
+			var amount = document.forms["repair"]["paymentAmount"].value;
+			if (amount != ""){	
+				amount = amount.slice(0, amount.length - 2) + "." + amount.slice(amount.length - 	2, amount.length);
+				document.forms["repair"]["paymentAmount"].value = amount;	
+			}
+		}
+	</script>
 </head>
-<body>
+<body onload="replaceRepairAmount()">
 
 
 	<div align="right">
@@ -48,33 +66,7 @@
 		</span>
 	</div>
 
-	<br />
-	<!--  	<div align="center">
-		<ul id="css3menu1" class="topmenu">
-			<li class="topmenu"><a href="#"
-				style="height: 18px; line-height: 18px;"><span><spring:message
-							code="label.header_repair" /></span></a>
-				<ul>
-					<li><a href="<c:url value="/repair/add" />"> <spring:message
-								code="label.repair_new" /></a></li>
-					<li><a href="<c:url value="/repair/list" />"><spring:message
-								code="label.repair_list" /></a></li>
-				</ul></li>
-			<li class="topmenu"><a href="#"
-				style="height: 18px; line-height: 18px;"><span><spring:message
-							code="label.header_shop" /></span></a></li>
-			<sec:authorize ifAllGranted="ROLE_ADMIN">
-				<li class="topmenu"><a href="<c:url value="/user" />"
-					style="height: 18px; line-height: 18px;"><spring:message
-							code="label.header_users" /></a></li>
-			</sec:authorize>
-			<sec:authorize ifAllGranted="ROLE_SUPERADMIN">
-				<li class="topmenu"><a href="<c:url value="/clients" />"
-					style="height: 18px; line-height: 18px;"><spring:message
-							code="label.header_clients" /></a></li>
-			</sec:authorize>
-		</ul>
-	</div>-->
+	<br />	
 
 	<nav id="menu-wrap">
 	<ul id="menu">
