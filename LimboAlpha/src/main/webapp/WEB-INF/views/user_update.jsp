@@ -65,6 +65,7 @@
 		</tr>
 	</table>
 	<form:hidden path="id" />
+	<form:hidden path="enabled" />
 	<input type="submit" value="<spring:message code="label.repair_update"/>" />
 </form:form>
 

@@ -22,12 +22,12 @@ public class RepairDAOImpl implements RepairDAO {
 
 	// move to util
 	private Repair modifyRepair(Repair repair){
-		if (repair.getBaterySerialNumber() != null && !repair.getBaterySerialNumber().isEmpty() && !repair.getBaterySerialNumber().equalsIgnoreCase("")){
+		if (repair.getBaterySerialNumber() != null){
 			repair.setBattery(true);
 		} else {
 			repair.setBattery(false);
 		}
-		if ((repair.getPhoneManufacturer() != null && !repair.getPhoneManufacturer().isEmpty()) || (repair.getPhoneModel() != null && !repair.getPhoneModel().isEmpty())) {
+		if ((repair.getPhoneManufacturer() != null)) {
 			repair.setPhone(true);
 		} else {
 			repair.setPhone(false);

@@ -84,11 +84,14 @@ public class RepairPDFGeneration {
         if (repair.isPhone())
         	cb.showText("X");
         cb.setTextMatrix(179, 442);
-        if (repair.isBattery());
+        if (repair.getCharger());
         	cb.showText("X");
         cb.setTextMatrix(227, 442);	
-        if (repair.getCharger())
+        if (repair.isBattery()){
         	cb.showText("X");
+        	cb.setTextMatrix(251, 442);
+        	cb.showText(repair.getBaterySerialNumber());
+        }
         cb.setTextMatrix(33, 400);
         Integer start = 400;
         String complain = repair.getComplains();
