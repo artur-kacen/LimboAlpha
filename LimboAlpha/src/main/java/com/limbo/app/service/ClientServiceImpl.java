@@ -15,15 +15,15 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private ClientDAO clientDAO;
  
-    @Transactional
+    @Transactional("static")
     public void addClient(Client client) {
     	clientDAO.addClient(client);
     }
-    @Transactional
+    @Transactional("static")
     public List<Client> listClient() { 
         return clientDAO.listClient();
     }
-    @Transactional
+    @Transactional("static")
     public void removeClient (Integer id) {
     	clientDAO.removeClient(id);
     }

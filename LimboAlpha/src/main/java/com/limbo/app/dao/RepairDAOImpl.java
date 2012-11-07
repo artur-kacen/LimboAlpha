@@ -12,27 +12,34 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class RepairDAOImpl implements RepairDAO {
+public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+	/*@Autowired
+	@Qualifier("dynamicSessionFactory")
+	private SessionFactory SessionFactory;*/
+	@Autowired 
+    public RepairDAOImpl(@Qualifier("dynamicSessionFactory") SessionFactory sessionFactory) { 
+     super(sessionFactory); 
+    }
 
 	// move to util
 	private Repair modifyRepair(Repair repair){
-		if (repair.getBaterySerialNumber() != null){
+		if (repair.getBaterySerialNumber() != null && !repair.getBaterySerialNumber().isEmpty()){
 			repair.setBattery(true);
 		} else {
 			repair.setBattery(false);
 		}
-		if ((repair.getPhoneManufacturer() != null)) {
+		if (repair.getPhoneManufacturer() != null && !repair.getPhoneManufacturer().isEmpty() ) {
 			repair.setPhone(true);
 		} else {
 			repair.setPhone(false);
 		}
-		if (repair.getWarrantyPeriod() != null) {
+		if (repair.getWarrantyPeriod() != null && repair.getWarrantyPeriod() > 0) {
 			repair.setWarranty(true);
 		} else {
 			repair.setWarranty(false);
@@ -50,17 +57,18 @@ public class RepairDAOImpl implements RepairDAO {
 		//if (repair.get)
 		repair.setUserId(user.getId());
 		repair = modifyRepair(repair);
-		sessionFactory.getCurrentSession().save(repair);
+		this.getSession().save(repair);
+		//SessionFactory.getCurrentSession().save(repair);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Repair> listRepair() {
-		Session session = sessionFactory.getCurrentSession();
+		Session session = this.getSession();
 		return session.createQuery("from Repair").list();
 	}
 
 	public void removeRepair(Integer id) {
-		Session session = sessionFactory.getCurrentSession();
+		Session session = this.getSession();
 		Repair repair = (Repair) session.load(Repair.class, id);
 		if (null != repair) {
 			DeletedRepairs delete = new DeletedRepairs();
@@ -74,13 +82,13 @@ public class RepairDAOImpl implements RepairDAO {
 	}
 
 	public Repair getRepair(Integer id){		
-		Session session = sessionFactory.getCurrentSession();
+		Session session = this.getSession();
 		Repair repair = (Repair) session.load(Repair.class, id);
 		return repair;
 	}
 	
 	public void updateRepair(Repair repair){		
-		Session session = sessionFactory.getCurrentSession();
+		Session session = this.getSession();
 		repair = modifyRepair(repair);
 		session.merge(repair);
 		session.flush();
@@ -103,7 +111,7 @@ public class RepairDAOImpl implements RepairDAO {
 	@SuppressWarnings("unchecked")
 	public List<Repair> listReturnedRepair(boolean isReturned) {
 		// TODO Auto-generated method stub
-		Session session = sessionFactory.getCurrentSession();
+		Session session = this.getSession();
 		Query query =  session.createQuery("from Repair where returned = :returned");
 		query.setParameter("returned", isReturned);
 		return query.list();
@@ -112,8 +120,9 @@ public class RepairDAOImpl implements RepairDAO {
 	@SuppressWarnings("unchecked")
 	public List<Repair> listDoneRepair() {
 		// TODO Auto-generated method stub
-		Session session = sessionFactory.getCurrentSession();
-		Query query =  session.createQuery("from Repair where repairDate is not null");
+		Session session = this.getSession();
+		Query query =  session.createQuery("from Repair where repairDate is not null and returned = :returned");
+		query.setParameter("returned", false);
 		return query.list();
 	}
 
@@ -127,7 +136,7 @@ public class RepairDAOImpl implements RepairDAO {
 	@SuppressWarnings("unchecked")
 	public List<DeletedRepairs> listDeletedRepairs() {
 		// TODO Auto-generated method stub
-		Session session = sessionFactory.getCurrentSession();
+		Session session = this.getSession();
 		return session.createQuery("from DeletedRepairs").list();
 	}
 

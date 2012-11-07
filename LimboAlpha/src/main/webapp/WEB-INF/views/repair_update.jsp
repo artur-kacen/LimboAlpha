@@ -96,7 +96,7 @@
 				<tr>
 					<td><form:input path="receiptDate" class="datepicker" /></td>
 					<td><form:input path="repairDate" class="datepicker" /></td>
-					<td><form:input path="paymentAmount" pattern="[0-9]*[\.|\,][0-9]{2}" /></td>
+					<td><form:input path="paymentAmount" pattern="[0-9]*[\.|\,][0-9]{2}.*" /></td>
 				</tr>
 			</table>
 		</fieldset>
@@ -107,7 +107,6 @@
 		<form:hidden path="returnDate" />
 		<form:hidden path="warranty" />
 		<form:hidden path="userId" />
-		<form:hidden path="charger" />
 		<input type="submit" value="<spring:message code="label.repair_update"/>" />
 	</CENTER>
 </form:form>

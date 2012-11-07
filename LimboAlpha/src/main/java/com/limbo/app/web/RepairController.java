@@ -27,8 +27,7 @@ import com.limbo.app.service.SystemUserService;
 @Controller
 public class RepairController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ClientController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
 	@Autowired
 	private RepairService repairService;
@@ -59,6 +58,7 @@ public class RepairController {
 			String username = user.getUsername();
 			SystemUser systemUser = userService.getUserByUsername(username);
 			logger.info("amount = " + repair.getPaymentAmount());
+			logger.info("warrant = " + repair.getWarrantyPeriod());
 			repairService.addRepair(repair, systemUser);
 		}
 		return "redirect:/repair/list";

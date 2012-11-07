@@ -26,13 +26,8 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
 		p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.databaseurl}"
-		p:username="${jdbc.username}" p:password="${jdbc.password}" />
-
-	<bean id="dynamicDataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.database}"
-		p:username="${jdbc.username}" p:password="${jdbc.password}" />
-
+		p:username="${jdbc.username}" p:password="${jdbc.password}" />		
+	
 	<!-- Настройки фабрики сессий Хибернейта -->
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
@@ -52,12 +47,44 @@
 			</props>
 		</property>
 	</bean>
-
-
+	
 	<!-- Менеджер транзакций -->
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
+		<qualifier value="static"/>
+	</bean>
+	
+	<!-- Непосредственно бин dataSource 2-->
+	<bean id="dynamicDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.databaseurlDynamic}"
+		p:username="${jdbc.username}" p:password="${jdbc.password}" />
+		
+	<!-- Настройки фабрики сессий Хибернейта 2-->
+	<bean id="dynamicSessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dynamicDataSource" />
+		<property name="configLocation">
+			<value>classpath:dynamicHibernate.cfg.xml</value>
+		</property>
+		<property name="configurationClass">
+			<value>org.hibernate.cfg.AnnotationConfiguration</value>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.dialect">${jdbc.dialect}</prop>
+				<prop key="hibernate.connection.charSet">UTF-8</prop>
+			</props>
+		</property>
 	</bean>
 
+	<!-- Менеджер транзакций  2 -->
+	<bean id="dynamicTransactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="dynamicSessionFactory" />
+		<qualifier value="dynamic"/>
+	</bean>
+	
 </beans>

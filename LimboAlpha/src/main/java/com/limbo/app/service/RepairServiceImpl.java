@@ -19,32 +19,32 @@ public class RepairServiceImpl implements RepairService {
 	@Autowired
 	private RepairDAO repairDAO;
 
-	@Transactional
+	@Transactional("dynamic")
 	public void addRepair(Repair repair, SystemUser user) {
 		repairDAO.addRepair(repair, user);
 	}
 
-	@Transactional
+	@Transactional("dynamic")
 	public List<Repair> listRepair() {
 		return repairDAO.listRepair();
 	}
 
-	@Transactional
+	@Transactional("dynamic")
 	public void removeRepair(Integer id) {
 		repairDAO.removeRepair(id);
 	}
 
-	@Transactional
+	@Transactional("dynamic")
 	public Repair getRepair(Integer id) {
 		return repairDAO.getRepair(id);
 	}
 
-	@Transactional
+	@Transactional("dynamic")
 	public void updateRepair(Repair repair) {
 		repairDAO.updateRepair(repair);
 	}
 
-	@Transactional
+	@Transactional("dynamic")
 	public void approveRepair(Integer id) {
 		repairDAO.approveRepair(id);
 	}
@@ -53,12 +53,12 @@ public class RepairServiceImpl implements RepairService {
 		return repairDAO.isReturned(repair);
 	}
 
-	@Transactional
+	@Transactional("dynamic")
 	public List<Repair> listReturnedRepair(boolean isReturned) {
 		return repairDAO.listReturnedRepair(isReturned);
 	}
 
-	@Transactional
+	@Transactional("dynamic")
 	public List<Repair> listDoneRepair() {
 		return repairDAO.listDoneRepair();
 	}

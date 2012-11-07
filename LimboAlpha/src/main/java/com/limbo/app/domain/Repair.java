@@ -145,7 +145,7 @@ public class Repair {
 		this.baterySerialNumber = baterySerialNumber;
 	}
 
-	public boolean getCharger() {
+	public boolean isCharger() {
 		return charger;
 	}
 

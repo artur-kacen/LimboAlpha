@@ -81,11 +81,13 @@ public class RepairPDFGeneration {
         cb.showText(repair.getPhoneSecurityCode());
         
         cb.setTextMatrix(129, 442);
-        if (repair.isPhone())
+        if (repair.isPhone()){
         	cb.showText("X");
+        }
         cb.setTextMatrix(179, 442);
-        if (repair.getCharger());
+        if (repair.isCharger()){
         	cb.showText("X");
+        }
         cb.setTextMatrix(227, 442);	
         if (repair.isBattery()){
         	cb.showText("X");
