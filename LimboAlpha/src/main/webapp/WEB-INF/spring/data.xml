@@ -57,7 +57,7 @@
 	
 	<!-- Непосредственно бин dataSource 2-->
 	<bean id="dynamicDataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		class="com.limbo.app.datasource.DynamicDataSource"
 		p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.databaseurlDynamic}"
 		p:username="${jdbc.username}" p:password="${jdbc.password}" />
 		

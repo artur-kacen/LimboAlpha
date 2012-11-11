@@ -1,67 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/security" 
-xmlns:beans="http://www.springframework.org/schema/beans" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xsi:schemaLocation="http://www.springframework.org/schema/beans 
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
 http://www.springframework.org/schema/security 
 http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
 
-<!--  	<beans:bean
-	    id="passwordEncoder"
-	    class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" >
-	    <beans:constructor-arg value="256" />
-	    <beans:property
-	        name="iterations"
-	        value="1024" />
-	</beans:bean>
-	
-	<beans:bean class="org.springframework.security.authentication.dao.ReflectionSaltSource" id="saltSource">
-	    <beans:property name="userPropertyToUse" value="id"/>
-	</beans:bean>-->
-	
+	<!-- <beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" 
+		> <beans:constructor-arg value="256" /> <beans:property name="iterations" 
+		value="1024" /> </beans:bean> <beans:bean class="org.springframework.security.authentication.dao.ReflectionSaltSource" 
+		id="saltSource"> <beans:property name="userPropertyToUse" value="id"/> </beans:bean> -->
+
 	<http access-denied-page="/error403.jsp">
-		<intercept-url pattern="/index*" access="ROLE_USER"/>
-		<intercept-url pattern="/clients*" access="ROLE_SUPERADMIN"/>
-		<intercept-url pattern="/repair/list/returned*" access="ROLE_USER"/>
-		<intercept-url pattern="/repair/list/repaired*" access="ROLE_USER"/>
-		<intercept-url pattern="/repair/list/all*" access="ROLE_USER"/>
-		<intercept-url pattern="/repair/list/deleted*" access="ROLE_ADMIN"/>
-		<intercept-url pattern="/repair/list/deleted/*" access="ROLE_ADMIN"/>
-		<intercept-url pattern="/repair/add*" access="ROLE_USER"/>
-		<intercept-url pattern="/repair/getpdf/*" access="ROLE_USER"/>
-		<intercept-url pattern="/repair/delete/*" access="ROLE_ADMIN,ROLE_SUPERADMIN"/>
-		<intercept-url pattern="/repair/update/*" access="ROLE_USER"/>
-		<intercept-url pattern="/user**" access="ROLE_ADMIN"/>
-		<intercept-url pattern="/user/list*" access="ROLE_ADMIN"/>
-		<intercept-url pattern="/user/add*" access="ROLE_ADMIN"/>
-		<intercept-url pattern="/user/delete/*" access="ROLE_ADMIN"/>
-		<intercept-url pattern="/user/update/*" access="ROLE_ADMIN"/>
-		<intercept-url pattern="/user/update/add*" access="ROLE_ADMIN"/>
-		<form-login login-page="/login.jsp" default-target-url="/index" authentication-failure-url="/login.jsp?error=true"/>
-		<logout logout-url="/logout" logout-success-url="/index"/>		
-		<remember-me/>
+		<intercept-url pattern="/index*" access="ROLE_USER" />
+		<intercept-url pattern="/clients*" access="ROLE_SUPERADMIN" />
+		<intercept-url pattern="/repair/list/returned*" access="ROLE_USER" />
+		<intercept-url pattern="/repair/list/repaired*" access="ROLE_USER" />
+		<intercept-url pattern="/repair/list/all*" access="ROLE_USER" />
+		<intercept-url pattern="/repair/list/deleted*" access="ROLE_ADMIN" />
+		<intercept-url pattern="/repair/list/deleted/*" access="ROLE_ADMIN" />
+		<intercept-url pattern="/repair/add*" access="ROLE_USER" />
+		<intercept-url pattern="/repair/getpdf/*" access="ROLE_USER" />
+		<intercept-url pattern="/repair/delete/*" access="ROLE_ADMIN,ROLE_SUPERADMIN" />
+		<intercept-url pattern="/repair/update/*" access="ROLE_USER" />
+		<intercept-url pattern="/user**" access="ROLE_ADMIN" />
+		<intercept-url pattern="/user/list*" access="ROLE_ADMIN" />
+		<intercept-url pattern="/user/add*" access="ROLE_ADMIN" />
+		<intercept-url pattern="/user/delete/*" access="ROLE_ADMIN" />
+		<intercept-url pattern="/user/update/*" access="ROLE_ADMIN" />
+		<intercept-url pattern="/user/update/add*" access="ROLE_ADMIN" />
+		<form-login login-page="/login.jsp" default-target-url="/index"
+			authentication-failure-url="/login.jsp?error=true" />
+		<logout logout-url="/logout" logout-success-url="/index" />
+		<remember-me key="rememberMeKey" user-service-ref="userDetailsService" />
 	</http>
-	
-	<authentication-manager>
-		<authentication-provider>
-		<!-- 	<password-encoder ref="passwordEncoder" >
-	             <salt-source ref="saltSource"/>
-	        </password-encoder> -->
-			<jdbc-user-service data-source-ref="dataSource"
-				users-by-username-query="
-					select username, password, enabled
-					from users where username=?
-				"
-				authorities-by-username-query="
-					select u.username, r.authority
-					from roles r
-					inner join user_roles ur ON r.role_id = ur.role_id
-					inner join users u ON ur.user_id = u.user_id
-					where u.username = ?
-				"
-			/>
-		</authentication-provider>
+
+	<!-- authentication manager and password hashing -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="daoAuthenticationProvider" />
 	</authentication-manager>
+
+	<beans:bean id="daoAuthenticationProvider"
+		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<beans:property name="userDetailsService" ref="userDetailsService" />
+		<beans:property name="saltSource">
+			<beans:bean
+				class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+				<beans:property name="userPropertyToUse" value="username" />
+			</beans:bean>
+		</beans:property>
+		<beans:property name="passwordEncoder" ref="passwordEncoder" />
+	</beans:bean>
+
+	<beans:bean id="userDetailsService" name="userAuthenticationProvider"
+		class="com.limbo.app.authentication.AuthenticationUserDetailsGetter">
+
+	</beans:bean>
+
+	<beans:bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+		<beans:constructor-arg index="0" value="256" />
+		<beans:property name="iterations" value="1024" />
+	</beans:bean>
+
+	<!-- <authentication-manager> <authentication-provider> <password-encoder 
+		ref="passwordEncoder" > <salt-source ref="saltSource"/> </password-encoder> 
+		<jdbc-user-service data-source-ref="dataSource" users-by-username-query=" 
+		select username, password, enabled from users where username=? " authorities-by-username-query=" 
+		select u.username, r.authority from roles r inner join user_roles ur ON r.role_id 
+		= ur.role_id inner join users u ON ur.user_id = u.user_id where u.username 
+		= ? " /> </authentication-provider> </authentication-manager> -->
 </beans:beans>

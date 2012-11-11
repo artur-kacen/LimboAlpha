@@ -2,6 +2,8 @@ package com.limbo.app.dao;
 
 import java.util.List;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import com.limbo.app.domain.SystemUser;
 
 public interface SystemUserDAO {
@@ -17,4 +19,8 @@ public interface SystemUserDAO {
     public void updateUser(SystemUser repair);
     
     public SystemUser getUserByUsername(String username);
+    
+    public List<SimpleGrantedAuthority> listUserAuthority(Integer id);
+    
+    public void  encryptPasswords() throws Exception;
 }

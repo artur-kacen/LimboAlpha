@@ -3,6 +3,7 @@ package com.limbo.app.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,4 +45,13 @@ public class SystemUserServiceImpl implements SystemUserService {
 	public SystemUser getUserByUsername(String username) {
 		return userDAO.getUserByUsername(username);
 	}
+
+	public List<SimpleGrantedAuthority> listUserAuthority(Integer id) {
+		return userDAO.listUserAuthority(id);
+	}
+	
+	public void  encryptPasswords() throws Exception{
+		userDAO.encryptPasswords();
+	}
+	
 }

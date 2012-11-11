@@ -70,5 +70,11 @@ public class SystemUserController {
 		return "redirect:/user/list";
 
 	}
+	
+	@RequestMapping("/user/encrypt")
+	public String encryptPasswords() throws Exception {
+		userService.encryptPasswords();
+		return "user_list";
+	}
 
 }
