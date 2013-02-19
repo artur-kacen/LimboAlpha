@@ -7,6 +7,6 @@
 	<session-factory>
 		<mapping class="com.limbo.app.domain.Client"/>
 		<mapping class="com.limbo.app.domain.SystemUser"/>
-		<mapping class="com.limbo.app.domain.UserRoles"/>
+		<mapping class="com.limbo.app.domain.Role"/>
 	</session-factory>
 </hibernate-configuration>

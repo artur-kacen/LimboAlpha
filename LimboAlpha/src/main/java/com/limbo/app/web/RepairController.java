@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.limbo.app.authentication.LoggedUser;
 import com.limbo.app.domain.Repair;
 import com.limbo.app.domain.SystemUser;
 import com.limbo.app.pdf.RepairPDFGeneration;
@@ -54,12 +55,8 @@ public class RepairController {
 	public String doAddRepair(@ModelAttribute("repair") Repair repair, BindingResult result) {
 
 		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
-			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			String username = user.getUsername();
-			SystemUser systemUser = userService.getUserByUsername(username);
-			logger.info("amount = " + repair.getPaymentAmount());
-			logger.info("warrant = " + repair.getWarrantyPeriod());
-			repairService.addRepair(repair, systemUser);
+			LoggedUser user = (LoggedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			repairService.addRepair(repair, user.getUserId());
 		}
 		return "redirect:/repair/list";
 
@@ -71,7 +68,7 @@ public class RepairController {
 		logger.info("Showing repair ID: " + repairId);
 		map.put("repairId", repairId);
 		map.put("repair", repairService.getRepair(repairId));
-		return "repair_update";
+		return "repair_add";
 	}
 
 	@RequestMapping(value = "/repair/update/add", method = RequestMethod.POST)
@@ -80,11 +77,6 @@ public class RepairController {
 
 		if (SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal() instanceof User) {
-			//User user = (User) SecurityContextHolder.getContext()
-			//		.getAuthentication().getPrincipal();
-			// Create logging who did last change
-			//String username = user.getUsername();
-			//SystemUser systemUser = userService.getUserByUsername(username);
 			repairService.updateRepair(repair);
 		}
 		return "redirect:/repair/list";

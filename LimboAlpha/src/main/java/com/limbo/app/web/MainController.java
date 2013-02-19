@@ -12,7 +12,6 @@ import com.limbo.app.service.ClientService;
 
 @Controller
 public class MainController {
-	//private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 	
 	@Autowired
 	private ClientService clientService;

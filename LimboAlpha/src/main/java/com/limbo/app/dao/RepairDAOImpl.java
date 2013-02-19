@@ -19,9 +19,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 
-	/*@Autowired
-	@Qualifier("dynamicSessionFactory")
-	private SessionFactory SessionFactory;*/
+	
 	@Autowired 
     public RepairDAOImpl(@Qualifier("dynamicSessionFactory") SessionFactory sessionFactory) { 
      super(sessionFactory); 
@@ -48,17 +46,12 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 			repair.setReceiptDate(getCurrentDat());
 		}
 		
-		//repair.setComplains(repair.getComplains().replaceAll("\n", " "));
-		
-		
 		return repair;
 	}
-	public void addRepair(Repair repair, SystemUser user) {
-		//if (repair.get)
-		repair.setUserId(user.getId());
+	public void addRepair(Repair repair, Integer userId) {		
+		repair.setUserId(userId);
 		repair = modifyRepair(repair);
 		this.getSession().save(repair);
-		//SessionFactory.getCurrentSession().save(repair);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -110,7 +103,6 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Repair> listReturnedRepair(boolean isReturned) {
-		// TODO Auto-generated method stub
 		Session session = this.getSession();
 		Query query =  session.createQuery("from Repair where returned = :returned");
 		query.setParameter("returned", isReturned);
@@ -119,7 +111,6 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Repair> listDoneRepair() {
-		// TODO Auto-generated method stub
 		Session session = this.getSession();
 		Query query =  session.createQuery("from Repair where repairDate is not null and returned = :returned");
 		query.setParameter("returned", false);
@@ -135,13 +126,11 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<DeletedRepairs> listDeletedRepairs() {
-		// TODO Auto-generated method stub
 		Session session = this.getSession();
 		return session.createQuery("from DeletedRepairs").list();
 	}
 
-	public void repairRepair(Integer id) {
-		// TODO Auto-generated method stub		
+	public void repairRepair(Integer id) {		
 		Repair repair = getRepair(id);
 		if (repair.getRepairDate() == null){
 			repair.setRepairDate(getCurrentDat());

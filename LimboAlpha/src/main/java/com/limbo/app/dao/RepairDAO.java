@@ -8,7 +8,7 @@ import com.limbo.app.domain.SystemUser;
 
 public interface RepairDAO {
 
-    public void addRepair(Repair repair, SystemUser user);
+    public void addRepair(Repair repair, Integer userId);
 
     public List<Repair> listRepair();
 

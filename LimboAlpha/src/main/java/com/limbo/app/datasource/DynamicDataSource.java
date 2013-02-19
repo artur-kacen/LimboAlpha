@@ -11,9 +11,11 @@ import java.util.logging.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.AbstractDriverBasedDataSource;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
+import com.limbo.app.authentication.LoggedUser;
 import com.limbo.app.web.ClientController;
 
 public class DynamicDataSource extends AbstractDriverBasedDataSource {
@@ -22,7 +24,6 @@ public class DynamicDataSource extends AbstractDriverBasedDataSource {
 			.getLogger(ClientController.class);
 
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -30,11 +31,17 @@ public class DynamicDataSource extends AbstractDriverBasedDataSource {
 	protected Connection getConnectionFromDriver(Properties args)
 			throws SQLException {
 		logger.info("kacenar1: Connection estableshing");
-		// TODO Auto-generated method stub
-		String url = getUrl();
-		url +="skupka";
+		String url = null;
+		try {
+			LoggedUser user = (LoggedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			url = getUrl();
+			url += user.getCurrentDatabase();
 		logger.info("Creating new JDBC DriverManager Connection to ["
 				+ url + "]");
+		} catch(Exception e){
+			logger.info(e.toString());
+			e.printStackTrace();
+		}
 		return getConnectionFromDriverManager(url, args);
 	}
 

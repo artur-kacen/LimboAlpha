@@ -1,8 +1,15 @@
 package com.limbo.app.web;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -12,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.limbo.app.authentication.LoggedUser;
 import com.limbo.app.domain.SystemUser;
 import com.limbo.app.service.SystemUserService;
 
@@ -20,6 +28,8 @@ public class SystemUserController {
 	
 	@Autowired
 	SystemUserService userService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 	
 	@RequestMapping("/user")
 	public String userRedirect(){
@@ -56,9 +66,25 @@ public class SystemUserController {
 	
 	@RequestMapping("/user/update/{userId}")
 	public String updateUser(Map<String, Object> map, @PathVariable("userId") Integer userId) {
+		superAdmin();
 		map.put("userId", userId);
-		map.put("user", userService.getUser(userId));
-		return "user_update";
+		SystemUser user = userService.getUser(userId);
+		logger.info("Controller: user roles - " + user.getRoles().toString());
+		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+			LoggedUser loggedUser = (LoggedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			Collection<GrantedAuthority> grants = loggedUser.getAuthorities();
+			for (GrantedAuthority aut: grants){
+				logger.info(aut.getAuthority());
+			}
+		}	
+		
+		map.put("user", user);
+		return "user_add";
+	}
+	@PreAuthorize("hasRole('ROLE_SUPERADMIN')")
+	private boolean superAdmin(){
+		logger.info("SUPERADMIN");
+		return true;
 	}
 
 	@RequestMapping(value = "/user/update/add", method = RequestMethod.POST)

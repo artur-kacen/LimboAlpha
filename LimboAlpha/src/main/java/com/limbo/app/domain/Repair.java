@@ -50,8 +50,7 @@ public class Repair {
 	private String clientFullName;
 
 	@Column(name = "CLIENT_MOBILE_NUMBER")
-	private String clientMobileNumber;
-	
+	private String clientMobileNumber;	
 	
 	@Column(name = "RECEIPT_DATE")
 	private Date receiptDate;

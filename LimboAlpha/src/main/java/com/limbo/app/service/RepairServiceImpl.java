@@ -20,8 +20,8 @@ public class RepairServiceImpl implements RepairService {
 	private RepairDAO repairDAO;
 
 	@Transactional("dynamic")
-	public void addRepair(Repair repair, SystemUser user) {
-		repairDAO.addRepair(repair, user);
+	public void addRepair(Repair repair, Integer userId) {
+		repairDAO.addRepair(repair, userId);
 	}
 
 	@Transactional("dynamic")

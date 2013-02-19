@@ -3,10 +3,6 @@ package com.limbo.app.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.limbo.app.domain.SystemUser;
-import com.limbo.app.domain.UserRoles;
-import com.limbo.app.web.ClientController;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,25 +12,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Repository;
 
+import com.limbo.app.domain.SystemUser;
+import com.limbo.app.web.ClientController;
+
 @Repository
 public class SystemUserDAOImpl implements SystemUserDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ClientController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
 	public void addUser(SystemUser user) {
-		// if (repair.get)
 		user.setEnabled(true);
-		UserRoles ur = new UserRoles();
-		ur.setRoleId(1);
 		OneWayEncryptor encryptor = new OneWayEncryptor();
 		user.setPassword(encryptor.encrypt(user.getPassword(), user.getUsername()));
+//		user.getRoles();
 		sessionFactory.getCurrentSession().save(user);
-		ur.setUserId(user.getId());
-		sessionFactory.getCurrentSession().save(ur);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,6 +57,7 @@ public class SystemUserDAOImpl implements SystemUserDAO {
 		Session session = sessionFactory.getCurrentSession();
 		OneWayEncryptor encryptor = new OneWayEncryptor();
 		user.setPassword(encryptor.encrypt(user.getPassword(), user.getUsername()));
+		logger.info(user.getRoles().toString());
 		session.update(user);
 		session.flush();
 	}

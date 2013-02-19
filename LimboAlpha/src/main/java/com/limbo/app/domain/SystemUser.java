@@ -1,14 +1,23 @@
 package com.limbo.app.domain;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
+@org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class SystemUser {
 
     @Id
@@ -39,6 +48,13 @@ public class SystemUser {
     
     @Column(name = "TELEPHONE")
     private String telephone;
+    
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinTable(name="user_roles", 
+                joinColumns={@JoinColumn(name="USER_ID", nullable = false, updatable = false)}, 
+                inverseJoinColumns={@JoinColumn(name="ROLE_ID", nullable = false, updatable = false)})
+    private Set<Role> roles = new HashSet<Role>();  
     
     public Integer getId() {
 		return id;
@@ -110,5 +126,13 @@ public class SystemUser {
 
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+
+	public Set<Role> getRoles() {
+		return this.roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 }

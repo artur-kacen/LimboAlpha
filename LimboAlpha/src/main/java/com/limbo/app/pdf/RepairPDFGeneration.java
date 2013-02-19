@@ -27,7 +27,7 @@ public class RepairPDFGeneration {
 		PdfReader reader;
 		response.setHeader("Content-disposition", "attachment; filename="+  repair.getId()  +".pdf");
 		reader = new PdfReader(DATASHEET);
-		// Setup a new PDF Document
+		
 		Document document = new Document();
 
 		PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
@@ -40,10 +40,8 @@ public class RepairPDFGeneration {
 		
 		// Now, add it to the blank PDF document we've opened
 		PdfContentByte cb = writer.getDirectContent();
-		BaseFont bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1257, false);
-		
-		//cb.addTemplate(page, 0, 0);
-		
+		BaseFont bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1257, false);		
+			
 		cb.beginText();
 		cb.setFontAndSize(bf, 12);
 		
@@ -98,8 +96,6 @@ public class RepairPDFGeneration {
         Integer start = 400;
         String complain = repair.getComplains();
         Matcher matcher = Pattern.compile(".{1,150}+", Pattern.MULTILINE).matcher(complain);
-        //complain.split("(?<=\\G.{110})");
-       // for (String text: complain.split("(?<=\\G.{100})")){
         cb.setFontAndSize(bf, 9);
         while (matcher.find()){
         	cb.setTextMatrix(33, start);
@@ -120,14 +116,8 @@ public class RepairPDFGeneration {
         
         cb.setTextMatrix(345, 122);
         cb.showText(currentUser.getName() + "  " + currentUser.getSurname());
-        // we tell the contentByte, we've finished drawing text
         cb.endText();
         cb.addTemplate(page, 0, 0);
-		// Now do the usual addition of text atop the template
-		//document.add(new Paragraph("Here some text added to the template2222"));
-		// Etc, etc
-
-		// Done!
 		document.close();
 		response.getOutputStream().close();
 
