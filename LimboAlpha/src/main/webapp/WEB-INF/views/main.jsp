@@ -76,6 +76,7 @@
 				<li><a href="<c:url value="/repair/list" />"><spring:message code="label.repair_list" /></a>
 					<ul>
 						<li><a href="<c:url value="/repair/list/all" />"><spring:message code="label.repair_all" /></a></li>
+						<li><a href="<c:url value="/repair/list/new" />"><spring:message code="label.repair_new_items" /></a></li>
 						<li><a href="<c:url value="/repair/list/repaired" />"><spring:message code="label.repair_repaired" /></a></li>
 						<li><a href="<c:url value="/repair/list/returned" />"><spring:message code="label.repair_returned" /></a></li>
 						<sec:authorize ifAllGranted="ROLE_ADMIN">

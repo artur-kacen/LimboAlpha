@@ -95,6 +95,13 @@ public class RepairController {
 		return "repair_list";
 	}
 	
+	@RequestMapping("/repair/list/new")
+	public String listNewRepair(Map<String, Object> map) {
+		map.put("repairList", repairService.listNewRepair());
+		map.put("repairService", repairService);
+		return "repair_list";
+	}
+	
 	@RequestMapping("/repair/list/repaired")
 	public String listRepairedRepair(Map<String, Object> map) {
 		map.put("repairList", repairService.listDoneRepair());

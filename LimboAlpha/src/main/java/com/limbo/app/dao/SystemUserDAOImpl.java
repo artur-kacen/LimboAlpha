@@ -96,9 +96,9 @@ public class SystemUserDAOImpl implements SystemUserDAO {
 
 		List<SystemUser> users = session.createQuery("from SystemUser").list();
 		for (SystemUser user : users) {
-			encrypted = encryptor.encrypt(user.getPassword(),
+			/*encrypted = encryptor.encrypt(user.getPassword(),
 					user.getUsername());
-			user.setPassword(encrypted);
+			user.setPassword(encrypted);*/
 			updateUser(user);
 		}
 	}

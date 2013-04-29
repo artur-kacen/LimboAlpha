@@ -108,6 +108,14 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 		query.setParameter("returned", isReturned);
 		return query.list();
 	}	
+	
+	@SuppressWarnings("unchecked")
+	public List<Repair> listNewRepair(boolean isReturned) {
+		Session session = this.getSession();
+		Query query =  session.createQuery("from Repair where returned = :returned");
+		query.setParameter("returned", isReturned);
+		return query.list();
+	}	
 
 	@SuppressWarnings("unchecked")
 	public List<Repair> listDoneRepair() {
@@ -143,5 +151,13 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 		java.util.Date today = new java.util.Date();
 		Date date = new Date(today.getTime());
 		return date;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Repair> listNewRepair() {
+		Session session = this.getSession();
+		Query query =  session.createQuery("from Repair where repairDate is null and returned = :returned");
+		query.setParameter("returned", false);
+		return query.list();
 	}
 }

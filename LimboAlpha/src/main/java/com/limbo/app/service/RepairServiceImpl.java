@@ -28,6 +28,11 @@ public class RepairServiceImpl implements RepairService {
 	public List<Repair> listRepair() {
 		return repairDAO.listRepair();
 	}
+		
+	@Transactional("dynamic")
+	public List<Repair> listNewRepair() {
+		return repairDAO.listNewRepair();
+	}
 
 	@Transactional("dynamic")
 	public void removeRepair(Integer id) {
@@ -62,16 +67,19 @@ public class RepairServiceImpl implements RepairService {
 	public List<Repair> listDoneRepair() {
 		return repairDAO.listDoneRepair();
 	}
-
+	
+	@Transactional("dynamic")
 	public boolean isRepaired(Repair repair) {
 		return repairDAO.isRepaired(repair);
 	}
 
+	@Transactional("dynamic")
 	public List<DeletedRepairs> listDeletedRepairs() {
 		// TODO Auto-generated method stub
 		return repairDAO.listDeletedRepairs();
 	}
-
+	
+	@Transactional("dynamic")
 	public void repairRepair(Integer id) {
 		// TODO Auto-generated method stub
 		repairDAO.repairRepair(id);		

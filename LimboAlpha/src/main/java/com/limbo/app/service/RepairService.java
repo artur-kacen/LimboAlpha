@@ -11,6 +11,8 @@ public interface RepairService {
     public void addRepair(Repair repair, Integer userId);
 
     public List<Repair> listRepair();
+    
+    public List<Repair> listNewRepair();
 
     public void removeRepair(Integer id);
     
