@@ -9,10 +9,10 @@
 		<CENTER>
 		<table id="htmlgrid" class="testgrid">
 			<tr>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
+				<th width="18px"></th>
+				<th width="18px"></th>
+				<th width="18px"></th>
+				<th width="18px"></th>
 				<th><spring:message code="label.repair_id" /></th>
 				<th><spring:message code="label.repair_clientFullName" /></th>
 				<th><spring:message code="label.repair_clientMobileNumber" /></th>
@@ -23,14 +23,14 @@
 				<th><spring:message code="label.repair_phoneModel" /></th>
 				<th><spring:message code="label.repair_paymentAmount" /></th>
 				<sec:authorize ifAllGranted="ROLE_ADMIN">
-					<th></th>
+					<th width="18px"></th>
 				</sec:authorize>	
 			</tr>
 			<c:forEach items="${repairList}" var="repair" varStatus="status">
 			<tr <c:choose><c:when test="${repairService.isReturned(repair)}"> class="returned_items"</c:when><c:when test="${repairService.isRepaired(repair)}"> class="repaired_item" </c:when><c:otherwise> class="line_items"</c:otherwise></c:choose>>
 				<c:choose>
 					<c:when test="${!repairService.isReturned(repair)}">
-						<td><a href="<c:url value="/repair/approve/${repair.id}" />"><img src="${pageContext.request.contextPath}/images/approve_icon.png" alt="approve"></a></td>
+						<td><a href="<c:url value="/repair/approve/${repair.id}" />"><img src="${pageContext.request.contextPath}/images/approve_icon.png" title="<spring:message code="label.returned_record" />" ></a></td>
 					</c:when>
 					<c:otherwise> 
 						<td></td>
@@ -38,14 +38,14 @@
 				</c:choose>
 				<c:choose>
 					<c:when test="${repair.repairDate == null}">
-						<td><a href="<c:url value="/repair/repair/${repair.id}" />"><img src="${pageContext.request.contextPath}/images/repair_icon.png" alt="repair" height="24px" width="24px"></a></td>
+						<td><a href="<c:url value="/repair/repair/${repair.id}" />"><img src="${pageContext.request.contextPath}/images/repair_icon.png" title="<spring:message code="label.fixed_record" />" height="24px" width="24px"></a></td>
 					</c:when>
 					<c:otherwise> 
 						<td></td>
 					</c:otherwise>
 				</c:choose>
-				<td><a href="<c:url value="/repair/getpdf/${repair.id}" />"><img src="${pageContext.request.contextPath}/images/pdf_icon.png" alt="get pdf"></a></td>
-				<td><a href="<c:url value="/repair/update/${repair.id}" />"><img src="${pageContext.request.contextPath}/images/edit_icon.png" alt="EDIT"></a></td>
+				<td><a href="<c:url value="/repair/getpdf/${repair.id}" />" target="_blank"><img src="${pageContext.request.contextPath}/images/pdf_icon.png" title="<spring:message code="label.repair_getpdf" />" ></a></td>
+				<td><a href="<c:url value="/repair/update/${repair.id}" />"><img src="${pageContext.request.contextPath}/images/edit_icon.png" title="<spring:message code="label.edit_record" />" ></a></td>
 				<td>${repair.id}</td>
 				<td WIDTH="10%">${repair.clientFullName}</td>
 				<td WIDTH="7%">${repair.clientMobileNumber}</td>
@@ -56,7 +56,7 @@
 				<td>${repair.phoneModel}</td>
 				<td><fmt:formatNumber type="currency" currencySymbol="Ls" minFractionDigits="2" value="${repair.paymentAmount / 100}"/></td>
 				<sec:authorize ifAllGranted="ROLE_ADMIN">
-					<td><a href="<c:url value="/repair/delete/${repair.id}" />"><img src="${pageContext.request.contextPath}/images/delete_icon.png"></a></td>	
+					<td><a href="<c:url value="/repair/delete/${repair.id}" />" onclick="return confirm('<spring:message code="label.ask_before_delete" />')"><img src="${pageContext.request.contextPath}/images/delete_icon.png" title="<spring:message code="label.delete" />"></a></td>	
 				</sec:authorize>
 			</tr>
 		</c:forEach>
