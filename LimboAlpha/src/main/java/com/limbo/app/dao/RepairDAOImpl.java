@@ -1,15 +1,24 @@
 package com.limbo.app.dao;
 
+import java.math.BigInteger;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.limbo.app.domain.DataTablesRequest;
+import com.limbo.app.domain.DataTablesResponse;
 import com.limbo.app.domain.DeletedRepairs;
 import com.limbo.app.domain.Repair;
-import com.limbo.app.domain.SystemUser;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,12 +63,6 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 		this.getSession().save(repair);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Repair> listRepair() {
-		Session session = this.getSession();
-		return session.createQuery("from Repair").list();
-	}
-
 	public void removeRepair(Integer id) {
 		Session session = this.getSession();
 		Repair repair = (Repair) session.load(Repair.class, id);
@@ -71,12 +74,13 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 			session.delete(repair);
 			session.flush();
 		}
-
 	}
 
 	public Repair getRepair(Integer id){		
-		Session session = this.getSession();
-		Repair repair = (Repair) session.load(Repair.class, id);
+		Session session = this.getSession();		
+		Query query =  session.createQuery("from Repair where id = :id");
+		query.setParameter("id", id);
+		Repair repair = (Repair)query.list().get(0);
 		return repair;
 	}
 	
@@ -100,29 +104,33 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 	public boolean isReturned(Repair repair){
 		return repair.isReturned();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Repair> listRepair() {
+		Session session = this.getSession();
+		return session.createQuery("from Repair order by id desc").list();
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<Repair> listReturnedRepair(boolean isReturned) {
 		Session session = this.getSession();
-		Query query =  session.createQuery("from Repair where returned = :returned");
+		Query query =  session.createQuery("from Repair where returned = :returned order by id desc");
 		query.setParameter("returned", isReturned);
 		return query.list();
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public List<Repair> listNewRepair(boolean isReturned) {
+	public List<Repair> listDoneOrNewRepairs(boolean isRepaired) {
 		Session session = this.getSession();
-		Query query =  session.createQuery("from Repair where returned = :returned");
-		query.setParameter("returned", isReturned);
-		return query.list();
-	}	
-
-	@SuppressWarnings("unchecked")
-	public List<Repair> listDoneRepair() {
-		Session session = this.getSession();
-		Query query =  session.createQuery("from Repair where repairDate is not null and returned = :returned");
-		query.setParameter("returned", false);
-		return query.list();
+		Criteria criteria = session.createCriteria(Repair.class);
+		if (isRepaired) {
+			criteria.add(Restrictions.isNotNull("repairDate"));
+		} else {
+			criteria.add(Restrictions.isNull("repairDate"));
+		}
+		criteria.add(Restrictions.eq("returned", false));
+		criteria.addOrder(Order.desc("id"));
+		return criteria.list();
 	}
 
 	public boolean isRepaired(Repair repair) {
@@ -153,11 +161,77 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 		return date;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Repair> listNewRepair() {
+	public DataTablesResponse<Repair> getDataTableResponse(
+			DataTablesRequest dtReq, Boolean isReturned, Boolean isRepaired) {
+		
+		List<String> columnList = Arrays.asList("id", "clientFullName", "clientMobileNumber",
+				"complains", "receiptDate", "repairDate", "phoneManufacturer", "phoneModel", 
+				"paymentAmount");
+		List<String> stringSearch = Arrays.asList("clientFullName", "clientMobileNumber",
+				"complains", "phoneManufacturer", "phoneModel");
+		List<String> intSearch = Arrays.asList("id", "paymentAmount");
+		
 		Session session = this.getSession();
-		Query query =  session.createQuery("from Repair where repairDate is null and returned = :returned");
-		query.setParameter("returned", false);
-		return query.list();
+		Criteria criteria = session.createCriteria(Repair.class);
+		
+		try {
+			if (isRepaired) {
+				criteria.add(Restrictions.isNotNull("repairDate"));
+			} else {
+				criteria.add(Restrictions.isNull("repairDate"));
+			}
+			criteria.add(Restrictions.eq("returned", false));
+		} catch (Exception e) {
+			logger.info("isRepaired is null");
+		}
+		if (isReturned != null) {
+			criteria.add(Restrictions.eq("returned", isReturned));
+		} else {
+			logger.info("isReturned is null");
+		}
+			
+		
+		
+		criteria.setFirstResult(dtReq.displayStart);
+		criteria.setMaxResults(dtReq.displayLength);
+		
+		logger.info("Sorting: " + columnList.get(dtReq.sortedColumns.get(0)));
+		if (dtReq.sortDirections.get(0).equals("asc")) {
+			criteria.addOrder(Order.asc(columnList.get(dtReq.sortedColumns.get(0))));
+		} else {
+			criteria.addOrder(Order.desc(columnList.get(dtReq.sortedColumns.get(0))));
+		}		
+		
+		if (dtReq.searchQuery != null && !dtReq.searchQuery.isEmpty()) {
+			Disjunction disjunction = Restrictions.disjunction();
+			for (String column: stringSearch) {
+				disjunction.add(Restrictions.like(column, "%" + dtReq.searchQuery + "%"));
+			}
+			try {
+				for (String column: intSearch){
+					disjunction.add(Restrictions.ge(column, Integer.parseInt(dtReq.searchQuery)));
+				}
+			} catch (Exception e) {
+				logger.info("Unable to parse: " + dtReq.searchQuery);
+			}
+			
+			criteria.add(disjunction);
+		}
+		List<Repair> repairs = criteria.list();
+		
+		DataTablesResponse<Repair> dataTableResponse = new DataTablesResponse<Repair>();		
+		dataTableResponse.data = repairs;
+//		int foundRows = ((Long)session.createQuery("select found_rows()").uniqueResult()).intValue();
+		int foundRows = ((BigInteger)session.createSQLQuery("select found_rows();").uniqueResult()).intValue();
+		logger.info("Found rows: " + foundRows);
+		int rowCount = ((Long)session.createQuery("select count(*) from Repair").uniqueResult()).intValue();
+		logger.info("Total rows: " + rowCount);
+		dataTableResponse.totalDisplayRecords = rowCount;
+		dataTableResponse.totalRecords = rowCount;
+		dataTableResponse.echo = dtReq.echo;
+		
+		return dataTableResponse;
 	}
+
+	
 }

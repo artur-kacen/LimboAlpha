@@ -2,17 +2,15 @@ package com.limbo.app.dao;
 
 import java.util.List;
 
+import com.limbo.app.domain.DataTablesRequest;
+import com.limbo.app.domain.DataTablesResponse;
 import com.limbo.app.domain.DeletedRepairs;
 import com.limbo.app.domain.Repair;
-import com.limbo.app.domain.SystemUser;
 
 public interface RepairDAO {
 
-    public void addRepair(Repair repair, Integer userId);
-
-    public List<Repair> listRepair();
-    
-    public List<Repair> listNewRepair(); 
+	// Add, update, delete...
+    public void addRepair(Repair repair, Integer userId);    
 
     public void removeRepair(Integer id);
     
@@ -22,15 +20,22 @@ public interface RepairDAO {
     
     public void approveRepair(Integer id);
         
-    public boolean isReturned(Repair repair);
-       
-    public boolean isRepaired(Repair repair);
+
+    // Returns lists by criteria    
+    public DataTablesResponse<Repair> getDataTableResponse(DataTablesRequest dtReq, Boolean isReturned, Boolean isRepaired);
+    
+    public List<Repair> listRepair();
     
     public List<Repair> listReturnedRepair(boolean isReturned);
     
-    public List<Repair> listDoneRepair();
+    public List<Repair> listDoneOrNewRepairs(boolean isRepaired);
     
     public List<DeletedRepairs> listDeletedRepairs();
     
+    // Miscellaneous
     public void repairRepair(Integer id);
+    
+    public boolean isReturned(Repair repair);
+    
+    public boolean isRepaired(Repair repair);
 }

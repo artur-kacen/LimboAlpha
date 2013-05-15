@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Validator;
-
 import com.limbo.app.dao.RepairDAO;
+import com.limbo.app.domain.DataTablesRequest;
+import com.limbo.app.domain.DataTablesResponse;
 import com.limbo.app.domain.DeletedRepairs;
 import com.limbo.app.domain.Repair;
-import com.limbo.app.domain.SystemUser;
 
 @Service
 public class RepairServiceImpl implements RepairService {
@@ -30,8 +29,8 @@ public class RepairServiceImpl implements RepairService {
 	}
 		
 	@Transactional("dynamic")
-	public List<Repair> listNewRepair() {
-		return repairDAO.listNewRepair();
+	public List<Repair> listDoneOrNewRepairs(boolean isRepaired) {
+		return repairDAO.listDoneOrNewRepairs(isRepaired);
 	}
 
 	@Transactional("dynamic")
@@ -62,12 +61,7 @@ public class RepairServiceImpl implements RepairService {
 	public List<Repair> listReturnedRepair(boolean isReturned) {
 		return repairDAO.listReturnedRepair(isReturned);
 	}
-
-	@Transactional("dynamic")
-	public List<Repair> listDoneRepair() {
-		return repairDAO.listDoneRepair();
-	}
-	
+		
 	@Transactional("dynamic")
 	public boolean isRepaired(Repair repair) {
 		return repairDAO.isRepaired(repair);
@@ -75,13 +69,17 @@ public class RepairServiceImpl implements RepairService {
 
 	@Transactional("dynamic")
 	public List<DeletedRepairs> listDeletedRepairs() {
-		// TODO Auto-generated method stub
 		return repairDAO.listDeletedRepairs();
 	}
 	
 	@Transactional("dynamic")
 	public void repairRepair(Integer id) {
-		// TODO Auto-generated method stub
 		repairDAO.repairRepair(id);		
+	}
+
+	@Transactional("dynamic")
+	public DataTablesResponse<Repair> getDataTableResponse(
+			DataTablesRequest dtReq, Boolean isReturned, Boolean isRepaired) {
+		return repairDAO.getDataTableResponse(dtReq, isReturned, isRepaired);
 	}
 }

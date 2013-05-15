@@ -6,125 +6,109 @@
 
 <jsp:include page="main.jsp" />
 
+<<script type="text/javascript">
+function onReapirSubmit(){
+	var amount = $("#paymentAmount");
+	if (amount.val() != ""){
+		  amount.val(amount.val().replace(/[^0-9]/gi, ""));		
+	  }
+	alert(amount.val());
+}	
+</script>
+
 <form:form method="post" action="add" commandName="repair"
-	onsubmit="onSubmitRepair()" modelAttribute="repair">
-	<form:errors path="*" cssClass="errorblock" element="div" />
-	<CENTER>
-		<c:if test="${repairId > 0}">
-			<h1>
-				<spring:message code="label.repair_id" />
-				: ${repairId}
-			</h1>
-		</c:if>
+		modelAttribute="repair" class="form-horizontal" onsubmit="onReapirSubmit()">
+		<form:errors path="*" cssClass="errorblock" element="div" />
+		<CENTER>
+			<c:if test="${repairId > 0}">
+				<h1>
+					<spring:message code="label.repair_id" />
+					: ${repairId}
+				</h1>
+			</c:if>
 
-		<fieldset>
-			<legend>Информация о клиенте</legend>
-			<table>
-				<tr>
-					<td><spring:message code="label.repair_clientFullName" />:</td>
-					<td><form:input path="clientFullName" required="required" /></td>
-				</tr>
-				<tr>
-					<td><spring:message code="label.repair_clientMobileNumber" />:
-					</td>
-					<td><form:input path="clientMobileNumber" required="required" /></td>
-				</tr>
-			</table>
-		</fieldset>
-		<fieldset>
-			<legend>Информация о телефоне</legend>
-			<table>
-				<tr>
-					<td><form:label path="phoneManufacturer">
-							<spring:message code="label.repair_phoneManufacturer" />
-						</form:label></td>
-					<td><form:label path="phoneModel">
-							<spring:message code="label.repair_phoneModel" />
-						</form:label></td>
-				</tr>
-				<tr>
-					<td><form:input path="phoneManufacturer" /></td>
-					<td><form:input path="phoneModel" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="phoneSecurityCode">
-							<spring:message code="label.repair_phoneSecurityCode" />
-						</form:label></td>
-					<td><form:label path="imei">
-							<spring:message code="label.repair_phoneIMEI" />
-						</form:label></td>
-				</tr>
-				<tr>
-					<td><form:input path="phoneSecurityCode" /></td>
-					<td><form:input path="imei" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="warranty">
-							<spring:message code="label.repair_warantyPeriod" />
-						</form:label></td>
-					<td><form:label path="baterySerialNumber">
-							<spring:message code="label.repair_batterySerialNumber" />
-						</form:label></td>
-				</tr>
-				<tr>
-					<td><form:input path="warrantyPeriod" /></td>
-					<td><form:input path="baterySerialNumber" /></td>
-				</tr>
-				<tr>
-					<td><form:label path="charger">
-							<spring:message code="label.repair_charger" />
-						</form:label></td>
-				</tr>
-				<tr>
-					<td><form:checkbox path="charger" /></td>
-				</tr>
-			</table>
-			<form:label path="complains">
-				<spring:message code="label.repair_complains" />
-			</form:label>
-			</br>
-			<form:textarea path="complains" rows="10" cols="50" />
-			</br>
-		</fieldset>
-		<fieldset>
-			<legend>Информация о ремонте</legend>
-			<table>
-				<tr>
-					<td><form:label path="receiptDate">
-							<spring:message code="label.repair_receiptDate" />
-						</form:label></td>
-					<td><form:label path="repairDate">
-							<spring:message code="label.repair_repairDate" />
-						</form:label></td>
-					<td><form:label path="paymentAmount">
-							<spring:message code="label.repair_paymentAmount" />
-						</form:label></td>
-				</tr>
-				<tr>
-					<td><form:input path="receiptDate" class="datepicker" /></td>
-					<td><form:input path="repairDate" class="datepicker" /></td>
-					<td><form:input path="paymentAmount"
-							pattern="[0-9]*[\.|\,][0-9]{2}.*" /></td>
-				</tr>
-			</table>
-		</fieldset>
-		<form:hidden path="id" />
-		<form:hidden path="phone" />
-		<form:hidden path="battery" />
-		<form:hidden path="returned" />
-		<form:hidden path="returnDate" />
-		<form:hidden path="warranty" />
-		<form:hidden path="userId" />
-
-		<input type="submit"
+			<fieldset>
+				<legend>Информация о клиенте</legend>
+				<div class="control-group">
+					<label class="control-label"  for="clientFullName"><spring:message code="label.repair_clientFullName" />:</label>
+					<form:input path="clientFullName" required="required" />
+				</div>
+				<div class="control-group">	
+					<label class="control-label" for="clientMobileNumber"><spring:message code="label.repair_clientMobileNumber" />:</label>
+					<form:input path="clientMobileNumber" required="required" />
+				</div>
+			</fieldset>
+			
+			<fieldset>
+				<legend>Информация о телефоне</legend>
+				<div class="control-group">
+					<label class="control-label" for="phoneManufacturer" ><spring:message code="label.repair_clientFullName" />:</label>
+					<form:input path="phoneManufacturer" />
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="phoneModel" ><spring:message code="label.repair_phoneModel" />:</label>
+					<form:input path="phoneModel" />
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="phoneSecurityCode" ><spring:message code="label.repair_phoneSecurityCode" />:</label>
+					<form:input path="phoneSecurityCode" />
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="imei" ><spring:message code="label.repair_phoneIMEI" />:</label>
+					<form:input path="imei" />
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="warrantyPeriod" ><spring:message code="label.repair_warantyPeriod" />:</label>
+					<form:input path="warrantyPeriod" />
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="baterySerialNumber" ><spring:message code="label.repair_batterySerialNumber" />:</label>
+					<form:input path="baterySerialNumber" />
+				</div>
+				
+				 <div class="control-group">				    
+				 	<label class="checkbox" for="charger"> <spring:message code="label.repair_charger" />:</label>
+					<form:checkbox path="charger" />
+				</div>
+				<form:label path="complains">
+					<spring:message code="label.repair_complains" />
+				</form:label>
+				<form:textarea path="complains" rows="10" cols="100" cssStyle="width: 500px;" />
+				<br />
+				<br />
+			</fieldset>
+			<fieldset>
+				<legend>Информация о ремонте</legend>
+				<div class="control-group">
+					<label class="control-label" for="receiptDate" ><spring:message code="label.repair_receiptDate" />:</label>
+					<form:input path="receiptDate" class="datepicker" />
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="repairDate" ><spring:message code="label.repair_repairDate" />:</label>
+					<form:input path="repairDate" class="datepicker" />
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="paymentAmount" ><spring:message code="label.repair_paymentAmount" />:</label>
+					<form:input path="paymentAmount" placeholder="0.00" pattern="[0-9]*[\.|\,][0-9]{2}" />
+				</div>				
+			</fieldset>
+			<form:hidden path="id" />
+			<form:hidden path="phone" />
+			<form:hidden path="battery" />
+			<form:hidden path="returned" />
+			<form:hidden path="returnDate" />
+			<form:hidden path="warranty" />
+			<form:hidden path="userId" />	
+			<input type="submit"
 			<c:choose>
 				<c:when test="${repairId > 0}" > value="<spring:message code="label.repair_update"/>" </c:when>
 				<c:otherwise> value="<spring:message code="label.repair_addNew"/>" </c:otherwise> 
 			</c:choose> 
-		/>
-	</CENTER>
-</form:form>
-
+		/>	
+		</CENTER>
+	</form:form>
 
 </body>
 </html>

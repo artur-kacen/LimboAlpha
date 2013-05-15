@@ -2,17 +2,16 @@ package com.limbo.app.service;
 
 import java.util.List;
 
+import com.limbo.app.domain.DataTablesRequest;
+import com.limbo.app.domain.DataTablesResponse;
 import com.limbo.app.domain.DeletedRepairs;
 import com.limbo.app.domain.Repair;
 import com.limbo.app.domain.SystemUser;
 
 public interface RepairService {
 
-    public void addRepair(Repair repair, Integer userId);
-
-    public List<Repair> listRepair();
-    
-    public List<Repair> listNewRepair();
+	// Add, update, delete...
+    public void addRepair(Repair repair, Integer userId);    
 
     public void removeRepair(Integer id);
     
@@ -22,15 +21,23 @@ public interface RepairService {
     
     public void approveRepair(Integer id);
        
-    public boolean isReturned(Repair repar);
     
-    public List<Repair> listReturnedRepair(boolean isReturned);
+    // Returns lists by criteria
+    public DataTablesResponse<Repair> getDataTableResponse(DataTablesRequest dtReq, Boolean isReturned, Boolean isRepaired);
     
-    public List<Repair> listDoneRepair();
+    public List<Repair> listReturnedRepair(boolean isReturned);   
     
-    public boolean isRepaired(Repair repair);
+    public List<Repair> listDoneOrNewRepairs(boolean isRepaired);
+    
+    public List<Repair> listRepair(); 
     
     public List<DeletedRepairs> listDeletedRepairs();
     
+    
+    // Miscellaneous
     public void repairRepair(Integer id);
+    
+    public boolean isRepaired(Repair repair);
+    
+    public boolean isReturned(Repair repar);
 }

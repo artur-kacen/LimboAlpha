@@ -59,3 +59,8 @@ fieldset{
 .error {
 	color: #ff0000;
 }
+
+.repair_modal_table {
+	border: 0px;
+	
+}

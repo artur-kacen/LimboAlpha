@@ -10,6 +10,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+//@JsonSerialize(using = RepairSerializer.class)
 @Entity
 @Table(name = "repair")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)

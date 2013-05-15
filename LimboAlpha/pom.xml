@@ -92,7 +92,13 @@
 			<version>1.4</version>
 		</dependency>
 
-
+		<!-- JSON -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.9</version>
+		</dependency>
+		
 		<!-- MySQL database driver -->
 		<dependency>
 			<groupId>mysql</groupId>
