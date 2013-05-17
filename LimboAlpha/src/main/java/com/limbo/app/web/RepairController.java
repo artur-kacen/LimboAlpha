@@ -57,11 +57,11 @@ public class RepairController {
 		return "redirect:/repair/list";
 	}
 	
-	/*@RequestMapping("/repair/add")
+	@RequestMapping("/repair/add")
 	public String addRepair(Map<String, Object> map) {
 		map.put("repair", new Repair());
 		return "repair_add";
-	}*/
+	}
 
 	@RequestMapping(value = "/repair/add", method = RequestMethod.POST)
 	public String doAddRepair(@ModelAttribute("repair") Repair repair, BindingResult result) {

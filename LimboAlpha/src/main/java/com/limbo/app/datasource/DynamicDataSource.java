@@ -39,8 +39,7 @@ public class DynamicDataSource extends AbstractDriverBasedDataSource {
 		logger.info("Creating new JDBC DriverManager Connection to ["
 				+ url + "]");
 		} catch(Exception e){
-			logger.info(e.toString());
-			e.printStackTrace();
+			logger.info("Need to login befor accessing dynamic DB");
 		}
 		return getConnectionFromDriverManager(url, args);
 	}

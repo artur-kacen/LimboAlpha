@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:lang="http://www.springframework.org/schema/lang"
@@ -7,15 +8,8 @@
 	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<!-- Validation bean 
-	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />-->
-	
-	<bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-		<property name="basename" value="classpath:messages" />
-		<property name="defaultEncoding" value="UTF-8" />
-	</bean>
-
+	<!-- Validation bean <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" 
+		/> -->
 
 	<!-- Настройки бина dataSource будем хранить в отдельном файле -->
 	<bean id="propertyConfigurer"
@@ -26,8 +20,8 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
 		p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.databaseurl}"
-		p:username="${jdbc.username}" p:password="${jdbc.password}" />		
-	
+		p:username="${jdbc.username}" p:password="${jdbc.password}" />
+
 	<!-- Настройки фабрики сессий Хибернейта -->
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
@@ -47,21 +41,20 @@
 			</props>
 		</property>
 	</bean>
-	
+
 	<!-- Менеджер транзакций -->
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
-		<qualifier value="static"/>
+		<qualifier value="static" />
 	</bean>
-	
-	<!-- Непосредственно бин dataSource 2-->
-	<bean id="dynamicDataSource"
-		class="com.limbo.app.datasource.DynamicDataSource"
+
+	<!-- Непосредственно бин dataSource 2 -->
+	<bean id="dynamicDataSource" class="com.limbo.app.datasource.DynamicDataSource"
 		p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.databaseurlDynamic}"
 		p:username="${jdbc.username}" p:password="${jdbc.password}" />
-		
-	<!-- Настройки фабрики сессий Хибернейта 2-->
+
+	<!-- Настройки фабрики сессий Хибернейта 2 -->
 	<bean id="dynamicSessionFactory"
 		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dynamicDataSource" />
@@ -80,11 +73,11 @@
 		</property>
 	</bean>
 
-	<!-- Менеджер транзакций  2 -->
+	<!-- Менеджер транзакций 2 -->
 	<bean id="dynamicTransactionManager"
 		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory" ref="dynamicSessionFactory" />
-		<qualifier value="dynamic"/>
+		<qualifier value="dynamic" />
 	</bean>
-	
+
 </beans>

@@ -72,8 +72,7 @@
 
       code {
         font-size: 80%;
-      }
-
+      }      
     </style>
     <link href="${pageContext.request.contextPath}/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
     
@@ -111,7 +110,7 @@
 	            <p class="navbar-text pull-right">
 	            	<a href="?lang=ru"><img src="${pageContext.request.contextPath}/img/ru.png" /></a>
 	            	<a href="?lang=lv"><img src="${pageContext.request.contextPath}/img/lv.png" /></a>
-	             	<spring:message code="label.header_welcome" /> <a href="#" class="navbar-link"><u>Username</u></a>
+	             	<spring:message code="label.header_welcome" /> <a href="#" class="navbar-link"> <i class="icon-user icon-white"></i> <u>Username</u></a>
 	            </p>
 	            <ul class="nav">
 	            <li class="dropdown">                    

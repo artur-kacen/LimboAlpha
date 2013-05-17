@@ -2,7 +2,6 @@ package com.limbo.app.dao;
 
 import java.math.BigInteger;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
@@ -164,9 +164,7 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 	public DataTablesResponse<Repair> getDataTableResponse(
 			DataTablesRequest dtReq, Boolean isReturned, Boolean isRepaired) {
 		
-		List<String> columnList = Arrays.asList("id", "clientFullName", "clientMobileNumber",
-				"complains", "receiptDate", "repairDate", "phoneManufacturer", "phoneModel", 
-				"paymentAmount");
+		List<String> columnList =  dtReq.dataProp;
 		List<String> stringSearch = Arrays.asList("clientFullName", "clientMobileNumber",
 				"complains", "phoneManufacturer", "phoneModel");
 		List<String> intSearch = Arrays.asList("id", "paymentAmount");
@@ -201,9 +199,8 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 		} else {
 			criteria.addOrder(Order.desc(columnList.get(dtReq.sortedColumns.get(0))));
 		}		
-		
-		if (dtReq.searchQuery != null && !dtReq.searchQuery.isEmpty()) {
-			Disjunction disjunction = Restrictions.disjunction();
+		Disjunction disjunction = Restrictions.disjunction();
+		if (dtReq.searchQuery != null && !dtReq.searchQuery.isEmpty()) {			
 			for (String column: stringSearch) {
 				disjunction.add(Restrictions.like(column, "%" + dtReq.searchQuery + "%"));
 			}
@@ -213,10 +210,25 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 				}
 			} catch (Exception e) {
 				logger.info("Unable to parse: " + dtReq.searchQuery);
-			}
-			
-			criteria.add(disjunction);
+			}		
 		}
+		Conjunction conjuction = Restrictions.conjunction();
+		for (int i=0; i<dtReq.columnSearches.size(); i++) {
+			String pattern = dtReq.columnSearches.get(i);
+			if (pattern != null && !pattern.isEmpty()) {
+				logger.info("pattern: "+pattern);
+				String column = columnList.get(i);
+				if (stringSearch.contains(column)) {
+					logger.info("String!");
+					conjuction.add(Restrictions.like(column, "%" + pattern + "%"));
+				} else if(intSearch.contains(column)) {
+					logger.info("Integer!");
+					conjuction.add(Restrictions.ge(column, Integer.parseInt(pattern)));
+				}				
+			}			
+		}
+		criteria.add(disjunction);
+		criteria.add(conjuction);
 		List<Repair> repairs = criteria.list();
 		
 		DataTablesResponse<Repair> dataTableResponse = new DataTablesResponse<Repair>();		

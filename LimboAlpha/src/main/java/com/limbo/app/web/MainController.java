@@ -23,7 +23,7 @@ public class MainController {
 	
 	@RequestMapping("/index")
 	public String listClients(Map<String, Object> map) {
-		return "main";	
+		return "redirect:/repair/list";	
 	}
 	
 }
