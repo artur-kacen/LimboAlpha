@@ -9,17 +9,12 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 	<global-method-security pre-post-annotations="enabled"/>
 	<http access-denied-page="/error403.jsp">
 		<intercept-url pattern="/index*" access="ROLE_USER" />
+		<intercept-url pattern="/shop*" access="ROLE_USER" />		
+		<intercept-url pattern="/contacts*" access="ROLE_USER" />
 		<intercept-url pattern="/clients*" access="ROLE_SUPERADMIN" />
 		<intercept-url pattern="/repair/list*" access="ROLE_USER" />
-		<intercept-url pattern="/repair/list/returned*" access="ROLE_USER" />
-		<intercept-url pattern="/repair/list/repaired*" access="ROLE_USER" />
-		<intercept-url pattern="/repair/list/all*" access="ROLE_USER" />
-		<intercept-url pattern="/repair/list/deleted*" access="ROLE_ADMIN" />
-		<intercept-url pattern="/repair/list/deleted/*" access="ROLE_ADMIN" />
 		<intercept-url pattern="/repair/add*" access="ROLE_USER" />
 		<intercept-url pattern="/repair/getpdf/*" access="ROLE_USER" />
-		<intercept-url pattern="/repair/delete/*" access="ROLE_ADMIN,ROLE_SUPERADMIN" />
-		<intercept-url pattern="/repair/update/*" access="ROLE_USER" />
 		<intercept-url pattern="/user**" access="ROLE_ADMIN" />
 		<intercept-url pattern="/user/list*" access="ROLE_ADMIN" />
 		<intercept-url pattern="/user/add*" access="ROLE_ADMIN" />

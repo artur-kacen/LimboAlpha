@@ -26,4 +26,9 @@ public class MainController {
 		return "redirect:/repair/list";	
 	}
 	
+	@RequestMapping("/contacts")
+	public String contactForm(Map<String, Object> map) {
+		return "about";	
+	}
+	
 }

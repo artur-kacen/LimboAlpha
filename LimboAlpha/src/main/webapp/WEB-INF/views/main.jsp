@@ -129,7 +129,7 @@
 							</sec:authorize>
 	                    </ul>
 	            </li>
-	              <li><a href="#"><spring:message code="label.header_shop" /></a></li>
+	              <li><a href="<c:url value="/shop" />"><spring:message code="label.header_shop" /></a></li>
 	              <sec:authorize ifAllGranted="ROLE_ADMIN">
 						<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" tabindex="-1" href="<c:url value="/user" />">
@@ -144,7 +144,7 @@
 					<sec:authorize ifAllGranted="ROLE_SUPERADMIN">
 						<li><a href="<c:url value="/clients" />"><spring:message code="label.header_clients" /></a></li>
 					</sec:authorize>
-					<li><a href="#"><spring:message code="label.header_contacts" /></a></li>
+					<li><a href="<c:url value="/contacts" />"><spring:message code="label.header_contacts" /></a></li>
 	            </ul>
 	            <%-- <form class="navbar-search pull-right">
 				  <input type="text" class="search-query" placeholder="Search">
