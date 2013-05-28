@@ -1,7 +1,9 @@
 package com.limbo.app.domain;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,6 +17,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+
+@JsonSerialize(using = JsonSystemUserSerializer.class)
 @Entity
 @Table(name = "users")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
@@ -50,11 +56,11 @@ public class SystemUser {
     private String telephone;
     
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name="user_roles", 
-                joinColumns={@JoinColumn(name="USER_ID", nullable = false, updatable = false)}, 
-                inverseJoinColumns={@JoinColumn(name="ROLE_ID", nullable = false, updatable = false)})
-    private Set<Role> roles = new HashSet<Role>();  
+                joinColumns={@JoinColumn(name="USER_ID", nullable = false)}, 
+                inverseJoinColumns={@JoinColumn(name="ROLE_ID", nullable = false)})
+    private List<Role> roles = new ArrayList<Role>();  
     
     public Integer getId() {
 		return id;
@@ -128,11 +134,11 @@ public class SystemUser {
 		this.telephone = telephone;
 	}
 
-	public Set<Role> getRoles() {
+	public List<Role> getRoles() {
 		return this.roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 }

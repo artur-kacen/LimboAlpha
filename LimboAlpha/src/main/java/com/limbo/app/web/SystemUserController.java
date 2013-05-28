@@ -16,11 +16,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.limbo.app.authentication.LoggedUser;
+import com.limbo.app.domain.DataTablesRequest;
+import com.limbo.app.domain.DataTablesResponse;
+import com.limbo.app.domain.Repair;
 import com.limbo.app.domain.SystemUser;
+import com.limbo.app.service.RoleService;
 import com.limbo.app.service.SystemUserService;
 
 @Controller
@@ -28,6 +34,9 @@ public class SystemUserController {
 	
 	@Autowired
 	SystemUserService userService;
+	
+	@Autowired
+	RoleService roleService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 	
@@ -38,10 +47,11 @@ public class SystemUserController {
 
 	@RequestMapping("/user/list")
 	public String showAllUsers(Map<String, Object> map) {
-		map.put("userList", userService.listUser());
-		map.put("userService", userService);		
-		
-		return "user_list";
+		//map.put("userList", userService.listUser());
+		map.put("roles", roleService.listRoles());
+		map.put("user", new SystemUser());
+		return "user_json";
+		//return "user_list";
 	}
 	
 	@RequestMapping("/user/add")
@@ -102,5 +112,13 @@ public class SystemUserController {
 		userService.encryptPasswords();
 		return "user_list";
 	}
+	
+	@RequestMapping(value = "/user/doajax.do", method = RequestMethod.POST)
+	public @ResponseBody
+	DataTablesResponse<SystemUser> getData(@RequestBody DataTablesRequest dtReq, Boolean isReturned, Boolean isRepaired) {
+		logger.info("User ajax request.");
+		DataTablesResponse<SystemUser> dtResp = userService.getDataTableResponse(dtReq);		
+		return dtResp;
+	}	
 
 }

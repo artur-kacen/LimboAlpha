@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.limbo.app.dao.SystemUserDAO;
+import com.limbo.app.domain.DataTablesRequest;
+import com.limbo.app.domain.DataTablesResponse;
 import com.limbo.app.domain.SystemUser;
 
 @Service
@@ -54,4 +56,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 		userDAO.encryptPasswords();
 	}
 	
+	public DataTablesResponse<SystemUser> getDataTableResponse(DataTablesRequest dtReq){
+		return userDAO.getDataTableResponse(dtReq);
+	}
 }

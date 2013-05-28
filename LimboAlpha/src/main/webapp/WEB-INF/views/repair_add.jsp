@@ -91,16 +91,17 @@
 					<form:hidden path="returnDate" />
 					<form:hidden path="warranty" />
 					<form:hidden path="userId" />	
-					<input type="submit"
-					<c:choose>
-						<c:when test="${repairId > 0}" > value="<spring:message code="label.repair_update"/>" </c:when>
-						<c:otherwise> value="<spring:message code="label.repair_addNew"/>" </c:otherwise> 
-					</c:choose> 
-				/>	
+					<input type="submit" class="btn btn-large"
+						<c:choose>
+							<c:when test="${repairId > 0}" > value="<spring:message code="label.repair_update"/>" </c:when>
+							<c:otherwise> value="<spring:message code="label.repair_addNew"/>" </c:otherwise> 
+						</c:choose> 
+					/>	
 				</CENTER>
 			</form:form>
 		</div>
-	</div>
+		<div id="push"></div>
+	</div>	
 	<div id="footer">
 	  	<div class="container">
 		    <p class="muted credit"><spring:message code="label.footer" /></p>

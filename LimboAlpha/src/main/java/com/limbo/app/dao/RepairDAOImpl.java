@@ -180,13 +180,11 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 			}
 			criteria.add(Restrictions.eq("returned", false));
 		} catch (Exception e) {
-			logger.info("isRepaired is null");
+			
 		}
 		if (isReturned != null) {
 			criteria.add(Restrictions.eq("returned", isReturned));
-		} else {
-			logger.info("isReturned is null");
-		}
+		} 
 			
 		
 		
@@ -216,13 +214,10 @@ public class RepairDAOImpl extends HibernateTemplate implements RepairDAO {
 		for (int i=0; i<dtReq.columnSearches.size(); i++) {
 			String pattern = dtReq.columnSearches.get(i);
 			if (pattern != null && !pattern.isEmpty()) {
-				logger.info("pattern: "+pattern);
 				String column = columnList.get(i);
 				if (stringSearch.contains(column)) {
-					logger.info("String!");
 					conjuction.add(Restrictions.like(column, "%" + pattern + "%"));
 				} else if(intSearch.contains(column)) {
-					logger.info("Integer!");
 					conjuction.add(Restrictions.ge(column, Integer.parseInt(pattern)));
 				}				
 			}			

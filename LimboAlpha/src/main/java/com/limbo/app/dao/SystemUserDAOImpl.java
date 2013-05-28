@@ -1,17 +1,22 @@
 package com.limbo.app.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Repository;
 
+import com.limbo.app.domain.DataTablesRequest;
+import com.limbo.app.domain.DataTablesResponse;
 import com.limbo.app.domain.SystemUser;
 import com.limbo.app.web.ClientController;
 
@@ -96,11 +101,34 @@ public class SystemUserDAOImpl implements SystemUserDAO {
 
 		List<SystemUser> users = session.createQuery("from SystemUser").list();
 		for (SystemUser user : users) {
-			/*encrypted = encryptor.encrypt(user.getPassword(),
-					user.getUsername());
-			user.setPassword(encrypted);*/
 			updateUser(user);
 		}
 	}
-
+	
+	public DataTablesResponse<SystemUser> getDataTableResponse(DataTablesRequest dtReq) {
+		List<String> columnList =  dtReq.dataProp;
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(SystemUser.class);
+		
+		criteria.setFirstResult(dtReq.displayStart);
+		criteria.setMaxResults(dtReq.displayLength);
+		
+		if (dtReq.sortDirections.get(0).equals("asc")) {
+			criteria.addOrder(Order.asc(columnList.get(dtReq.sortedColumns.get(0))));
+		} else {
+			criteria.addOrder(Order.desc(columnList.get(dtReq.sortedColumns.get(0))));
+		}	
+		
+		List<SystemUser> users = criteria.list();
+		DataTablesResponse<SystemUser> dataTableResponse = new DataTablesResponse<SystemUser>();
+		dataTableResponse.data = users;
+		
+		int foundRows = ((BigInteger)session.createSQLQuery("select found_rows();").uniqueResult()).intValue();
+		int rowCount = ((Long)session.createQuery("select count(*) from SystemUser").uniqueResult()).intValue();
+		dataTableResponse.totalDisplayRecords = rowCount;
+		dataTableResponse.totalRecords = rowCount;
+		dataTableResponse.echo = dtReq.echo;
+		
+		return dataTableResponse;
+	}
 }
