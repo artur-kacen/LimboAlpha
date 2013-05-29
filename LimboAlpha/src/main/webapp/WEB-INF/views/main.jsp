@@ -89,6 +89,7 @@
 		
 	<title><spring:message code="label.title" /></title>		
 </head>
+<%-- <% String s="#{sec:areAllGranted('ROLE_FOO, ROLE_BAR')}"; %> --%>
 <body>
 	<div id="wrap">
 	 	<div class="navbar navbar-inverse navbar-fixed-top">
@@ -106,10 +107,14 @@
 					| <a href="?lang=lv">lv</a>
 				</span> --%>
 	          <div class="nav-collapse collapse">
+	          
 	            <p class="navbar-text pull-right">
+	            	<form:select path="" multiple="false">
+						<form:options items="#{sec:property('allowedDatabases')}" />			
+					</form:select>
 	            	<a href="?lang=ru"><img src="${pageContext.request.contextPath}/img/ru.png" /></a>
 	            	<a href="?lang=lv"><img src="${pageContext.request.contextPath}/img/lv.png" /></a>
-	             	<spring:message code="label.header_welcome" /> <a href="#" class="navbar-link"> <i class="icon-user icon-white"></i> <u>Username</u></a>
+	             	<spring:message code="label.header_welcome" /> <a href="#" class="navbar-link"> <i class="icon-user icon-white"></i> <u><sec:authentication property="principal.name" /> <sec:authentication property="principal.surname" /> </u></a>
 	            </p>
 	            <ul class="nav">
 	            <li class="dropdown">                    

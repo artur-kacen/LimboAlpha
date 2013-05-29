@@ -21,24 +21,23 @@ public class AuthenticationUserDetailsGetter implements UserDetailsService {
 
 	@Autowired
 	SystemUserService userService;
-	private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(ClientController.class);
+
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException, DataAccessException {
-		logger.info("Proverjajem usera: " + username);
-		LoggedUser user = null;
-		SystemUser systemUser = null;
 		try {
-			systemUser = userService.getUserByUsername(username);
-			List<SimpleGrantedAuthority> grants = userService.listUserAuthority(systemUser.getId());
-			logger.info("prova usera: " + grants);
-			user = new LoggedUser(username, systemUser.getPassword(), true, true, true, true, grants, systemUser.getId());
+			SystemUser systemUser = userService.getUserByUsername(username);
+			List<SimpleGrantedAuthority> grants = userService
+					.listUserAuthority(systemUser.getId());
+			return new LoggedUser(username, systemUser.getPassword(), systemUser.isEnabled(),
+					true, true, true, grants, systemUser.getId(), systemUser.getName(),
+					systemUser.getSurname());
 		} catch (Exception e) {
 			logger.info(e.toString());
 			throw new UsernameNotFoundException("Error in retrieving user");
 		}
-		
-		return  user;
-
-	}	
+	}
 
 }

@@ -1,7 +1,9 @@
 package com.limbo.app.domain;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -24,8 +26,8 @@ public class Role {
     private String authority;
     
     
-    //@ManyToMany(mappedBy="roles")
-   //private Set<SystemUser> users = new HashSet<SystemUser>();
+    @ManyToMany(mappedBy="roles")
+   private List<SystemUser> users = new ArrayList<SystemUser>();
     
 	public Integer getId() {
 		return id;
@@ -43,11 +45,12 @@ public class Role {
 		this.authority = authority;
 	}
 
-/*	public Set<SystemUser> getUsers() {
+	public List<SystemUser> getUsers() {
 		return users;
 	}
 
-	public void setUsers(Set<SystemUser> users) {
+	public void setUsers(List<SystemUser> users) {
 		this.users = users;
-	}*/
+	}
+	
 }

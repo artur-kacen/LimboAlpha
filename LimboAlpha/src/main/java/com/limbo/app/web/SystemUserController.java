@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,10 +28,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.limbo.app.authentication.LoggedUser;
 import com.limbo.app.domain.DataTablesRequest;
 import com.limbo.app.domain.DataTablesResponse;
-import com.limbo.app.domain.Repair;
+import com.limbo.app.domain.Role;
 import com.limbo.app.domain.SystemUser;
 import com.limbo.app.service.RoleService;
 import com.limbo.app.service.SystemUserService;
+import com.limbo.app.util.RoleEditor;
 
 @Controller
 public class SystemUserController {
@@ -40,6 +45,11 @@ public class SystemUserController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 	
+	@InitBinder
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
+		binder.registerCustomEditor(Role.class, new RoleEditor(this.roleService));
+    }
+	
 	@RequestMapping("/user")
 	public String userRedirect(){
 		return "redirect:/user/list";
@@ -47,19 +57,18 @@ public class SystemUserController {
 
 	@RequestMapping("/user/list")
 	public String showAllUsers(Map<String, Object> map) {
-		//map.put("userList", userService.listUser());
 		map.put("roles", roleService.listRoles());
 		map.put("user", new SystemUser());
 		return "user_json";
-		//return "user_list";
 	}
 	
+	//@PreAuthorize("hasRole('ROLE_SUPERADMIN')")
 	@RequestMapping("/user/add")
 	public String addUser(Map<String, Object> map) {
+		map.put("roles", roleService.listRoles());
 		map.put("user", new SystemUser());
 		return "user_add";
 	}
-
 	
 	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
 	public String doAddUser(@ModelAttribute("user") SystemUser user, BindingResult result) {		
@@ -75,8 +84,7 @@ public class SystemUserController {
 	}
 	
 	@RequestMapping("/user/update/{userId}")
-	public String updateUser(Map<String, Object> map, @PathVariable("userId") Integer userId) {
-		superAdmin();
+	public String updateUser(Map<String, Object> map, @PathVariable("userId") Integer userId) {		
 		map.put("userId", userId);
 		SystemUser user = userService.getUser(userId);
 		logger.info("Controller: user roles - " + user.getRoles().toString());
@@ -90,23 +98,8 @@ public class SystemUserController {
 		
 		map.put("user", user);
 		return "user_add";
-	}
-	@PreAuthorize("hasRole('ROLE_SUPERADMIN')")
-	private boolean superAdmin(){
-		logger.info("SUPERADMIN");
-		return true;
-	}
+	}	
 
-	@RequestMapping(value = "/user/update/add", method = RequestMethod.POST)
-	public String doUpdateRepair(@ModelAttribute("user") SystemUser user, BindingResult result) {
-
-		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
-			userService.updateUser(user);
-		}
-		return "redirect:/user/list";
-
-	}
-	
 	@RequestMapping("/user/encrypt")
 	public String encryptPasswords() throws Exception {
 		userService.encryptPasswords();

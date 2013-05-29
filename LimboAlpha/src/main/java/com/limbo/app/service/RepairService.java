@@ -6,7 +6,6 @@ import com.limbo.app.domain.DataTablesRequest;
 import com.limbo.app.domain.DataTablesResponse;
 import com.limbo.app.domain.DeletedRepairs;
 import com.limbo.app.domain.Repair;
-import com.limbo.app.domain.SystemUser;
 
 public interface RepairService {
 

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import com.limbo.app.domain.DataTablesRequest;
 import com.limbo.app.domain.DataTablesResponse;
 import com.limbo.app.domain.SystemUser;
+import com.limbo.app.util.OneWayEncryptor;
 import com.limbo.app.web.ClientController;
 
 @Repository
@@ -29,11 +30,11 @@ public class SystemUserDAOImpl implements SystemUserDAO {
 	private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
 	public void addUser(SystemUser user) {
-		user.setEnabled(true);
-		OneWayEncryptor encryptor = new OneWayEncryptor();
-		user.setPassword(encryptor.encrypt(user.getPassword(), user.getUsername()));
-//		user.getRoles();
-		sessionFactory.getCurrentSession().save(user);
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();		
+		session.save(user);
+		session.flush();
+		session.getTransaction().commit();
 	}
 
 	@SuppressWarnings("unchecked")
